@@ -17,6 +17,7 @@ defmodule Remit.Profile do
     |> cast(attrs, [:name, :type, :currency])
     |> validate_required([:name, :type, :currency])
     |> process_slug
+    |> unique_constraint(:name, name: "profiles_slug_index")
   end
 
   # Slug check on name
@@ -27,5 +28,12 @@ defmodule Remit.Profile do
     else
       changeset
     end
+  end
+
+  def create(params) do
+    __MODULE__
+    |> Profile.changeset(params)
+    |> put_change(:type, "business")
+    |> Repo.insert()
   end
 end
