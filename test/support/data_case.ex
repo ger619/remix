@@ -22,6 +22,8 @@ defmodule Remit.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Remit.DataCase
+
+      import RemitWeb.TestUtil
     end
   end
 

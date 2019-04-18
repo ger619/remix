@@ -7,6 +7,7 @@ defmodule Remit.Repo.Migrations.CreateProfilesTable do
       add :type, :string, null: false
       add :slug, :string, null: false
       add :currency, :string, null: false
+      add :archived, :boolean, null: false, default: false
 
       timestamps()
     end

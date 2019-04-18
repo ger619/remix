@@ -21,6 +21,8 @@ defmodule RemitWeb.ConnCase do
       use Phoenix.ConnTest
       alias RemitWeb.Router.Helpers, as: Routes
 
+      import RemitWeb.TestUtil
+
       # The default endpoint for testing
       @endpoint RemitWeb.Endpoint
     end
