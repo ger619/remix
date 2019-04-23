@@ -1,3 +1,3 @@
 <h2>New profile<h2>
 <!--<%= render "form-html", Map.put(assigns, :action, profile_path(@conn, create)) %>-->
-<span><%= link "Back", to: profiles_path(@conn, :index)%></span>
+<span><%= link "Back", to: profile_path(@conn, :index)%></span>

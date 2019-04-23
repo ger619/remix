@@ -1,5 +1,5 @@
 defmodule Remit.Profile.Profile do
-  alias Remit.Profile.Repo
+  alias Remit.Repo
   alias Remit.Profile
 
   def get_profile!(id), do: Repo.get!(Profile, id)
@@ -9,9 +9,9 @@ defmodule Remit.Profile.Profile do
     |> Repo.insert()
   end
 
-  def update(profile, params) do
-    __MODULE__
-    |> Profile.changeset(profile, params)
+  def update_profile(%Profile{} = profile, params) do
+    profile
+    |> Profile.changeset(params)
     |> Repo.update()
   end
 end

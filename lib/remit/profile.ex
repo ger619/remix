@@ -1,7 +1,7 @@
 defmodule Remit.Profile do
   use Ecto.Schema
 
-  import Ecto.Query, only: [from: 2]
+  # import Ecto.Query, only: [from: 2]
   import Ecto.Changeset
 
   schema "profile" do
