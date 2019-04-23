@@ -1,5 +1,6 @@
 defmodule Remit.Profile do
   use Ecto.Schema
+
   import Ecto.Changeset
 
   alias Remit.Repo
@@ -37,6 +38,11 @@ defmodule Remit.Profile do
     |> changeset(params)
     |> put_change(:type, "business")
     |> Repo.insert()
+  end
 
+  def update_profile(%__MODULE__{} = profile, params) do
+    profile
+    |> changeset(params)
+    |> Repo.update()
   end
 end
