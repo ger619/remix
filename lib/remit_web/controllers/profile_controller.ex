@@ -8,7 +8,7 @@ defmodule RemitWeb.ProfileController do
   end
 
   def new(conn, _params) do
-    changeset = Profile.changeset(__MODULE__)
+    changeset = Profile.changeset(%Profile{})
     render conn, "new.html", changeset: changeset
   end
 
@@ -16,7 +16,7 @@ defmodule RemitWeb.ProfileController do
     case Profile.create(profile_params) do
       {:ok, profile} ->
         conn
-        |> redirect(to: Routes.profiles_path(conn, :show, profile))
+        |> redirect(to: Routes.profile_path(conn, :show, profile))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end

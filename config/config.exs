@@ -15,7 +15,9 @@ config :remit, RemitWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "z3jNpGSi9O3xwZDuqvcDd2pIItkwbcnEWreuHVe3+LPiyvENeb8GOPg9D1v8XSpI",
   render_errors: [view: RemitWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Remit.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Remit.Pue] #will be given a Plug module for interacting with plug.
+
+  # If you're using Guardian in yobSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
