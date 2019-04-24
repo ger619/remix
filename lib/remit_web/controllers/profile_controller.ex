@@ -17,7 +17,7 @@ defmodule RemitWeb.ProfileController do
   end
 
   def update(conn, %{"id" => id, "profile" => profile_params}) do
-    profile = git Profile.get_profile!(id)
+    profile =  Profile.get_profile!(id)
 
     case Profile.update_profile(profile, profile_params) do
       {:ok, profile} ->
