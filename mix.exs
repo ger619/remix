@@ -43,7 +43,8 @@ defmodule Remit.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:slugger, "~> 0.3 "}
+      {:slugger, "~> 0.3"},
+      {:scrivener_ecto, "~> 2.0"}
     ]
   end
 
