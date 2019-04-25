@@ -15,7 +15,6 @@ defmodule Remit.Profile do
     timestamps()
   end
 
-  What
   @doc false
   def changeset(profile, attrs \\ %{}) do
     profile
