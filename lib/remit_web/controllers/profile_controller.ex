@@ -13,8 +13,8 @@ defmodule RemitWeb.ProfileController do
     render(conn, "new.html", changeset: changeset)
   end
 
-  def create(conn, %{"profile" => profile_params}) do
-    case Profile.create(profile_params) do
+  def create(conn, %{"profile" => profile_params, "profile_type"=>profile_type}) do
+    case Profile.create(profile_params, profile_type) do
       {:ok, profile} ->
         conn
         |> redirect(to: Routes.profile_path(conn, :show, profile))

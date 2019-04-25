@@ -34,28 +34,23 @@ defmodule Remit.Profile do
     end
   end
 
-  def create(business) do
+  def create(params, profile_type) when profile_type in ["user", "business"] do
+    changeset = changeset(%__MODULE__{}, params)
+    |> put_change(:type, profile_type)
 
-    %__MODULE__{}
-
-    Repo.transaction(fn ->
-      case Repo.insert(changeset(%__MODULE__{}, business)) do
-        {:ok, profile} ->
-          profile
-
-          |> create_account()
-
-        {:error, changeset} ->
-          Repo.rollback(changeset)
-      end
-    end)
-
+    Repo.transaction(
+      fn ->
+      profile = Repo.insert!(changeset)
+      create_account!(profile)
+      profile
+    end
+    )
   end
 
-  defp create_account(params) do
-    %__MODULE__{}
-    |> Account.changeset(params)
-    |> Repo.insert()
+  defp create_account!(profile) do
+    %Account{profile_id: profile.id}
+    |> Account.changeset()
+    |> Repo.insert!()
   end
 
   def update_profile(%__MODULE__{} = profile, params) do
