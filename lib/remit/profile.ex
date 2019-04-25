@@ -6,7 +6,7 @@ defmodule Remit.Profile do
   alias Remit.Repo
   alias Remit.Account.Account
 
-  schema "profile" do
+  schema "profiles" do
     field :name, :string
     field :slug, :string
     field :type, :string
@@ -14,7 +14,7 @@ defmodule Remit.Profile do
 
     timestamps()
   end
-  What
+
   @doc false
   def changeset(profile, attrs \\ %{}) do
     profile
@@ -58,6 +58,4 @@ defmodule Remit.Profile do
     |> changeset(params)
     |> Repo.update()
   end
-
-
 end

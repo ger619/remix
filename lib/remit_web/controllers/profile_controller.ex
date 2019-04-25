@@ -42,4 +42,9 @@ defmodule RemitWeb.ProfileController do
         render(conn, "edit.html", profile: profile, changeset: changeset)
     end
   end
+
+  def show(conn, %{"id" => id}) do
+    profile = Repo.get!(Profile, id)
+    render(conn, "show.html", profile: profile)
+  end
 end

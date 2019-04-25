@@ -4,9 +4,9 @@ defmodule Remit.Account.Account do
 
   schema "accounts" do
     field :profile_id, :id
-    field :credits, :decimal
-    field :debits, :decimal
-    field :balance, :decimal
+    field :credits, :decimal, default: 0
+    field :debits, :decimal, default: 0
+    field :balance, :decimal, default: 0
 
     timestamps()
   end
@@ -14,7 +14,7 @@ defmodule Remit.Account.Account do
   @doc false
   def changeset(account, attrs \\ %{}) do
     account
-    |> cast(attrs, [:profile_id, :credit, :debits, :balance])
-    |> validate_required([:profile_id, :credit, :debits, :balance])
+    |> cast(attrs, [:profile_id])
+    |> validate_required([:profile_id])
   end
 end
