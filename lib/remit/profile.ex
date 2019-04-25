@@ -6,7 +6,7 @@ defmodule Remit.Profile do
   alias Remit.Repo
   alias Remit.Account.Account
 
-  schema "profile" do
+  schema "profiles" do
     field :name, :string
     field :slug, :string
     field :type, :string
@@ -14,6 +14,7 @@ defmodule Remit.Profile do
 
     timestamps()
   end
+
   What
   @doc false
   def changeset(profile, attrs \\ %{}) do
@@ -35,21 +36,16 @@ defmodule Remit.Profile do
   end
 
   def create(business) do
-
-    %__MODULE__{}
-
     Repo.transaction(fn ->
       case Repo.insert(changeset(%__MODULE__{}, business)) do
         {:ok, profile} ->
           profile
-
           |> create_account()
 
         {:error, changeset} ->
           Repo.rollback(changeset)
       end
     end)
-
   end
 
   defp create_account(params) do
@@ -63,6 +59,4 @@ defmodule Remit.Profile do
     |> changeset(params)
     |> Repo.update()
   end
-
-
 end
