@@ -39,7 +39,7 @@ defmodule RemitWeb.ProfileController do
         |> redirect(to: Routes.profile_path(conn, :show, profile))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", profile, changeset: changeset)
+        render(conn, "edit.html", profile: profile, changeset: changeset)
     end
   end
 end

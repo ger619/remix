@@ -4,6 +4,7 @@ defmodule Remit.Profile do
   import Ecto.Changeset
 
   alias Remit.Repo
+  alias Remit.Account.Account
 
   schema "profile" do
     field :name, :string
@@ -13,7 +14,7 @@ defmodule Remit.Profile do
 
     timestamps()
   end
-
+  What
   @doc false
   def changeset(profile, attrs \\ %{}) do
     profile
@@ -33,10 +34,27 @@ defmodule Remit.Profile do
     end
   end
 
-  def create(params) do
+  def create(business) do
+
     %__MODULE__{}
-    |> changeset(params)
-    |> put_change(:type, "business")
+
+    Repo.transaction(fn ->
+      case Repo.insert(changeset(%__MODULE__{}, business)) do
+        {:ok, profile} ->
+          profile
+
+          |> create_account()
+
+        {:error, changeset} ->
+          Repo.rollback(changeset)
+      end
+    end)
+
+  end
+
+  defp create_account(params) do
+    %__MODULE__{}
+    |> Account.changeset(params)
     |> Repo.insert()
   end
 
@@ -45,4 +63,6 @@ defmodule Remit.Profile do
     |> changeset(params)
     |> Repo.update()
   end
+
+
 end
