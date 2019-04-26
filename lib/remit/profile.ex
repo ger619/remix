@@ -40,9 +40,13 @@ defmodule Remit.Profile do
 
     Repo.transaction(
       fn ->
-      profile = Repo.insert!(changeset)
-      create_account!(profile)
-      profile
+        case Repo.insert(changeset) do
+          {:ok, profile} ->
+            create_account!(profile)
+            profile
+          {:error, changeset} ->
+            Repo.rollback(changeset)
+        end
     end
     )
   end
