@@ -1,3 +1,3 @@
 defmodule RemitWeb.ProfileView do
-  #  use RemitWeb, :view
+  use RemitWeb, :view
 end
