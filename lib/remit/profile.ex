@@ -35,8 +35,9 @@ defmodule Remit.Profile do
   end
 
   def create(params, profile_type) when profile_type in ["user", "business"] do
-    changeset = changeset(%__MODULE__{}, params)
-    |> put_change(:type, profile_type)
+    changeset =
+      changeset(%__MODULE__{}, params)
+      |> put_change(:type, profile_type)
 
     Repo.transaction(
       fn ->
@@ -52,7 +53,8 @@ defmodule Remit.Profile do
   end
 
   defp create_account!(profile) do
-    %Account{profile_id: profile.id}
+    %Account{}
+    |> change(profile_id: profile.id)
     |> Account.changeset()
     |> Repo.insert!()
   end
