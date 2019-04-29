@@ -17,6 +17,10 @@ config :remit, RemitWeb.Endpoint,
   render_errors: [view: RemitWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Remit.PubSub, adapter: Phoenix.PubSub.PG2]
 
+config :scrivener_html,
+    routes_helper: Remit.Router.Helpers
+
+
 # If you're using Guardian in yobSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger

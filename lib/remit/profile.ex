@@ -4,9 +4,14 @@ defmodule Remit.Profile do
   import Ecto.Changeset
 
   alias Remit.Repo
+<<<<<<< HEAD
   alias Remit.Account.Account
 
   schema "profiles" do
+=======
+
+  schema "profile" do
+>>>>>>> dc5417180868873862e0cd24e202d55d009446fb
     field :name, :string
     field :slug, :string
     field :type, :string
@@ -52,12 +57,13 @@ defmodule Remit.Profile do
     )
   end
 
+
   defp create_account!(profile) do
     %Account{}
     |> change(profile_id: profile.id)
     |> Account.changeset()
     |> Repo.insert!()
-  end
+
 
   def update_profile(%__MODULE__{} = profile, params) do
     profile

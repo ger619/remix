@@ -1,0 +1,31 @@
+
+<%= form_for @conn, Routes.user_path(@conn, :index), [method: :get, class: "pull-right"], fn f -> %>
+      <%= search_input f, :query %>
+      <%= submit "Search" %>
+    <% end %>
+
+
+    <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Id Number</th>
+        <th>Phone Number</th>
+        <th>Type</th>
+      </tr>
+    </thead>
+    <tbody>
+
+  <%= for user <- @users do %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.id_number %></td>
+        <td><%= user.phone_number %></td>
+        <td><%= user.id_type %></td>
+      </tr>
+  <% end %>
+    </tbody>
+  </table>
+
+
+  <%= pagination_links @page, distance: 3, next: "Next", previous: "Prev", first: true, last: true %>

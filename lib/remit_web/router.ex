@@ -17,7 +17,9 @@ defmodule RemitWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/profiles", ProfileController
+    resources "/profiles", ProfileController, except: [:delete]
+    resources "/users", UserController, except: [:delete]
+
   end
 
   # Other scopes may use custom stacks.
