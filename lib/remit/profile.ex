@@ -1,6 +1,9 @@
 defmodule Remit.Profile do
   use Ecto.Schema
+
   import Ecto.Changeset
+
+  alias Remit.Repo
 
   schema "profile" do
     field :name, :string
@@ -17,6 +20,7 @@ defmodule Remit.Profile do
     |> cast(attrs, [:name, :type, :currency])
     |> validate_required([:name, :type, :currency])
     |> process_slug
+    |> unique_constraint(:name, name: "profiles_slug_index")
   end
 
   # Slug check on name
@@ -27,5 +31,18 @@ defmodule Remit.Profile do
     else
       changeset
     end
+  end
+
+  def create(params) do
+    %__MODULE__{}
+    |> changeset(params)
+    |> put_change(:type, "business")
+    |> Repo.insert()
+  end
+
+  def update_profile(%__MODULE__{} = profile, params) do
+    profile
+    |> changeset(params)
+    |> Repo.update()
   end
 end
