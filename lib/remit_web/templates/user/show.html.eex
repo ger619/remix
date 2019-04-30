@@ -32,11 +32,6 @@
     <%= @user.password_hash %>
   </li>
 
-  <li>
-    <strong>Is admin:</strong>
-    <%= @user.is_admin %>
-  </li>
-
 </ul>
 
 <span><%= link "Edit", to: Routes.user_path(@conn, :edit, @user) %></span>

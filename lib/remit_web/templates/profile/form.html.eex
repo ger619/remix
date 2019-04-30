@@ -24,10 +24,7 @@
         <%= submit "Submit", class: "btn btn-primary" %>
     </div>
 
-<<<<<<< Updated upstream
-<% end %>
-=======
 <% end %>s a lot of spaces in the source code, but the browser ignores it.
 
 The number of lines in a paragraph depends on the size of the browser window. If you resize the browser window, the number of lines in this pa
->>>>>>> Stashed changes
+
