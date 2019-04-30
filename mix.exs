@@ -20,7 +20,11 @@ defmodule Remit.MixProject do
   def application do
     [
       mod: {Remit.Application, []},
+<<<<<<< HEAD
       extra_applications: [:logger, :runtime_tools, :scrivener_ecto]
+=======
+      extra_applications: [:logger, :runtime_tools, :scrivener_ecto, :scrivener_html],
+>>>>>>> bd066a58ae867d89bb70462597e84278d44b773f
     ]
   end
 
@@ -44,8 +48,13 @@ defmodule Remit.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:slugger, "~> 0.3 "},
+<<<<<<< HEAD
       {:scrivener_ecto, "~> 2.2"},
       {:scrivener, "~> 2.7"},
+=======
+      {:scrivener, "~> 2.7"},
+      {:scrivener_ecto, "~> 2.2"},
+>>>>>>> bd066a58ae867d89bb70462597e84278d44b773f
       {:scrivener_html, "~> 1.8"}
 
     ]

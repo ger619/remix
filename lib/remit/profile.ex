@@ -5,7 +5,10 @@ defmodule Remit.Profile do
 
   alias Remit.Repo
 
-  schema "profile" do
+  alias Remit.Account.Account
+
+  schema "profiles" do
+
     field :name, :string
     field :slug, :string
     field :type, :string
@@ -33,12 +36,31 @@ defmodule Remit.Profile do
     end
   end
 
-  def create(params) do
-    %__MODULE__{}
-    |> changeset(params)
-    |> put_change(:type, "business")
-    |> Repo.insert()
+  def create(params, profile_type) when profile_type in ["user", "business"] do
+    changeset =
+      changeset(%__MODULE__{}, params)
+      |> put_change(:type, profile_type)
+
+    Repo.transaction(
+      fn ->
+        case Repo.insert(changeset) do
+          {:ok, profile} ->
+            create_account!(profile)
+            profile
+          {:error, changeset} ->
+            Repo.rollback(changeset)
+        end
+    end
+    )
   end
+
+
+  defp create_account!(profile) do
+    %Account{}
+    |> change(profile_id: profile.id)
+    |> Account.changeset()
+    |> Repo.insert!()
+
 
   def update_profile(%__MODULE__{} = profile, params) do
     profile

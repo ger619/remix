@@ -15,6 +15,7 @@ defmodule RemitWeb.ProfileController do
 
   def create(conn, %{"profile" => profile_params}) do
     case Profile.create(profile_params) do
+
       {:ok, profile} ->
         conn
         |> redirect(to: Routes.profile_path(conn, :show, profile))
@@ -39,7 +40,16 @@ defmodule RemitWeb.ProfileController do
         |> redirect(to: Routes.profile_path(conn, :show, profile))
 
       {:error, %Ecto.Changeset{} = changeset} ->
+
+
+
         render(conn, "edit.html", profile: profile, changeset: changeset)
     end
   end
+
+  def show(conn, %{"id" => id}) do
+    profile = Repo.get!(Profile, id)
+    render(conn, "show.html", profile: profile)
+  end
+
 end
