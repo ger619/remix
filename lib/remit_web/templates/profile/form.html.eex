@@ -4,19 +4,18 @@
     </div>
 
     <div class="form-label-group">
-        <%= text_input f , :name, class: "form-control", placeholder: "Name", required: true %>
         <%= label f, :name, "Name", class: "control-label" %>
+        <%= text_input f , :name, class: "form-control", placeholder: "Name", required: true %>
         <%= error_tag f, :name %>
     </div>
 
     <div class="form-label-group">
-        <select size= "1"><br>
-            <option>KES.
-            <option>USD.
-            <option selected>KES.
-        </select>
-        <%= text_input f , :name, class: "form-control", placeholder: "Currency", required: true %>
         <%= label f, :name, "Currency", class: "control-label" %>
+        <select size= "1"><br>
+            <option>KES
+            <option>USD
+        </select>
+
         <%= error_tag f, :currency %>
 
     </div>
