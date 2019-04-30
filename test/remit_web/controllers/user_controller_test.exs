@@ -1,17 +1,7 @@
 defmodule RemitWeb.UserControllerTest do
   use RemitWeb.ConnCase
 
-<<<<<<< HEAD
 
-  test "GET /users", %{conn: conn} do
-    conn = get(conn, Routes.user_path(conn, :index))
-    assert html_response(conn, 200)
-  end
-
-  test "GET /users?query=a&page=2", %{conn: conn} do
-    conn = get(conn, Routes.user_path(conn, :index))
-    assert html_response(conn, 200)
-=======
   alias Remit.Accounts
 
   @create_attrs %{email: "some email", id_number: "some id_number", id_type: "some id_type", is_admin: "some is_admin", name: "some name", password_hash: "some password_hash", phone_number: "some phone_number"}
@@ -60,7 +50,8 @@ defmodule RemitWeb.UserControllerTest do
     test "renders form for editing chosen user", %{conn: conn, user: user} do
       conn = get(conn, Routes.user_path(conn, :edit, user))
       assert html_response(conn, 200) =~ "Edit User"
-    end
+    endlved conflict.
+    ➜  remit git:(profile) ✗
   end
 
   describe "update user" do
@@ -95,6 +86,6 @@ defmodule RemitWeb.UserControllerTest do
   defp create_user(_) do
     user = fixture(:user)
     {:ok, user: user}
->>>>>>> bd066a58ae867d89bb70462597e84278d44b773f
+
   end
 end

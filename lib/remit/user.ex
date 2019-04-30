@@ -55,6 +55,16 @@ defmodule Remit.User do
     |> Repo.insert()
   end
 
+  def get_user!(id), do: Repo.get!(User, id)
+
+
+  def update_user(%__MODULE__{} = user, attrs) do
+    user
+    |> changeset(attrs)
+    |> Repo.update()
+  end
+
+
   def search_query(q) do
 
     search_query = "%#{q}%"
@@ -62,3 +72,4 @@ defmodule Remit.User do
 
   end
 end
+
