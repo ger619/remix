@@ -1,31 +1,50 @@
-
-<%= form_for @conn, Routes.user_path(@conn, :index), [method: :get, class: "pull-right"], fn f -> %>
-      <%= search_input f, :query %>
-      <%= submit "Search" %>
+<h1>Listing Users</h1>
+<div class="row">
+  <div class="col-md-4">
+    <span><%= link "New User", to: Routes.user_path(@conn, :new) %></span>
+  </div>
+  <div class="col-md-8">
+    <%= form_for @conn, Routes.user_path(@conn, :index), [method: :get, class: "pull-right"], fn f -> %>
+    <%= search_input f, :query %><%= submit "Search" %>
     <% end %>
 
+  </div>
 
-    <table class="table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Id Number</th>
-        <th>Phone Number</th>
-        <th>Type</th>
-      </tr>
-    </thead>
-    <tbody>
-
-  <%= for user <- @users do %>
-      <tr>
-        <td><%= user.name %></td>
-        <td><%= user.id_number %></td>
-        <td><%= user.phone_number %></td>
-        <td><%= user.id_type %></td>
-      </tr>
-  <% end %>
-    </tbody>
-  </table>
+</div>
 
 
-  <%= pagination_links @page, distance: 3, next: "Next", previous: "Prev", first: true, last: true %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Phone number</th>
+      <th>Email</th>
+      <th>Id number</th>
+      <th>Id type</th>
+      <th>Password</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for user <- @users do %>
+    <tr>
+      <td><%= user.name %></td>
+      <td><%= user.phone_number %></td>
+      <td><%= user.email %></td>
+      <td><%= user.id_number %></td>
+      <td><%= user.id_type %></td>
+      <td><%= user.password_hash %></td>
+
+      <td>
+        <%= link "Show", to: Routes.user_path(@conn, :show, user) %>
+        <%= link "Edit", to: Routes.user_path(@conn, :edit, user) %>
+
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= pagination_links @page, distance: 3, next: "Next", previous: "Prev", first: true, last: true %>

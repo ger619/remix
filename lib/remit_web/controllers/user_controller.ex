@@ -3,63 +3,70 @@ defmodule RemitWeb.UserController do
 
   alias Remit.Repo
   alias Remit.User
-
+  alias Remit.Accounts
 
   def index(conn, params) do
-      #Handles the search
-
-    page = case params["query"]  do
+    page =
+      case params["query"] do
         nil ->
           User
-       term ->
-         User.search_query(term)
 
-    end|> Repo.paginate(params)
-
+        term ->
+          User.search_query(term)
+      end
+      |> Repo.paginate(params)
 
     render(conn, "index.html", users: page.entries, page: page)
   end
 
-
-
-
-  def show(conn, %{"id" => id} )do
-    user = Repo.get(User, id)
-    render(conn, "show.html", user: user)
-  end
-
   def new(conn, _params) do
-      changeset = User.changeset(%User{})
-      render(conn, "new.html", changeset: changeset)
-    end
+    changeset = User.change_user()
+    render(conn, "new.html", changeset: changeset)
+  end
 
-    def create(conn, %{"user" => user_params}) do
-      case User.create(user_params) do
-        {:ok, user} ->
-          conn
-          |> redirect(to: Routes.user_path(conn, :show, user))
+  def create(conn, %{"user" => user_params}) do
+    case User.create_user(user_params) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "User created successfully.")
+        |> redirect(to: Routes.user_path(conn, :show, user))
 
-        {:error, %Ecto.Changeset{} = changeset} ->
-          render(conn, "new.html", changeset: changeset)
-      end
-    end
-
-    def edit(conn, %{"id" => id}) do
-      user = Repo.get!(User, id)
-      changeset = User.changeset(%User{}, %{})
-      render(conn, "edit.html", changeset: changeset, user: user)
-    end
-
-    def update(conn, %{"id" => id, "user" => user_params}) do
-      user = Repo.get!(User, id)
-
-      case User.update_user(user, user_params) do
-        {:ok, user} ->
-          conn
-          |> redirect(to: Routes.user_path(conn, :show, user))
-
-        {:error, %Ecto.Changeset{} = changeset} ->
-          render(conn, "edit.html", user, changeset: changeset)
-      end
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "new.html", changeset: changeset)
     end
   end
+
+  # def show(conn, %{"id" => id}) do
+  #   user = User.get_user!(id)
+  #   render(conn, "show.html", user: user)
+  # end
+  #
+  # def edit(conn, %{"id" => id}) do
+  #   user = User.get_user!(id)
+  #   changeset = User.change_user(user)
+  #   render(conn, "edit.html", user: user, changeset: changeset)
+  # end
+  #
+  # def update(conn, %{"id" => id, "user" => user_params}) do
+  #   user = User.get_user!(id)
+  #
+  #   case User.update_user(user, user_params) do
+  #     {:ok, user} ->
+  #       conn
+  #       |> put_flash(:info, "User updated successfully.")
+  #       |> redirect(to: Routes.user_path(conn, :show, user))
+  #
+  #     {:error, %Ecto.Changeset{} = changeset} ->
+  #       render(conn, "edit.html", user: user, changeset: changeset)
+  #   end
+  # end
+  #
+  # def delete(conn, %{"id" => id}) do
+  #   user = User.get_user!(id)
+  #   {:ok, _user} = User.delete_user(user)
+  #
+  #   conn
+  #   |> put_flash(:info, "User deleted successfully.")
+  #   |> redirect(to: Routes.user_path(conn, :index))
+  # end
+end

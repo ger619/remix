@@ -14,25 +14,38 @@ defmodule Remit.User do
     field :password_hash, :string
 
 
-
     timestamps()
   end
 
   @doc false
-  def changeset(user, attrs \\ %{}) do
+  def changeset(user, attrs) do
     user
     |> cast(attrs, [:name, :phone_number, :email, :id_number, :id_type, :password_hash])
-    |> validate_required([:name, :phone_number, :email, :id_number, :id_type, :password_hash])
+    |> validate_required([
+      :name,
+      :phone_number,
+      :email,
+      :id_number,
+      :id_type,
+      :password_hash
+    ])
   end
 
   def search_query(q) do
-
     search_query = "%#{q}%"
-    from x in __MODULE__, where: ilike(x.name, ^search_query), or_where: ilike(x.id_number, ^search_query)
 
-
+    from x in __MODULE__,
+      where: ilike(x.name, ^search_query),
+      or_where: ilike(x.id_number, ^search_query)
   end
 
+  def change_user() do
+    %__MODULE__{} |> changeset(%{})
+  end
 
-
+  def create_user(params) do
+    %__MODULE__{}
+    |> changeset(params)
+    |> Repo.insert()
+  end
 end

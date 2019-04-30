@@ -1,6 +1,5 @@
-<h2>New Users</h2>
+<h1>New User</h1>
 
-<%= render "new.html", Map.put(assigns, :action, Routes.user_path(@conn, :create)) %>
-
+<%= render "form.html", Map.put(assigns, :action, Routes.user_path(@conn, :create)) %>
 
 <span><%= link "Back", to: Routes.user_path(@conn, :index) %></span>
