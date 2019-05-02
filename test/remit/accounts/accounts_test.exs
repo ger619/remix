@@ -83,7 +83,7 @@ defmodule Remit.AccountsTest do
 
     test "delete_user/1 deletes the user" do
       user = user_fixture()
-      assert %User{deleted_at: deleted_at} = Accounts.delete_user(user)
+      assert %User{deleted_at: deleted_at} = Accounts.delete_user!(user)
       assert deleted_at
     end
 

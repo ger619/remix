@@ -98,11 +98,11 @@ defmodule RemitWeb.UserControllerTest do
 
     test "deletes chosen user", %{conn: conn, user: user} do
       conn = delete(conn, Routes.user_path(conn, :delete, user))
-      assert redirected_to(conn) == Routes.user_path(conn, :index)
+      assert redirected_to(conn) == Routes.user_path(conn, :show, user)
 
-      assert_error_sent 404, fn ->
-        get(conn, Routes.user_path(conn, :show, user))
-      end
+      conn = get(conn, Routes.user_path(conn, :show, user))
+      # user is still shown when archived
+      assert html_response(conn, 200)
     end
   end
 

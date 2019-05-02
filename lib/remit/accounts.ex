@@ -86,7 +86,7 @@ defmodule Remit.Accounts do
     User.changeset(user, %{})
   end
 
-  def delete_user(%User{} = user) do
+  def delete_user!(%User{} = user) do
     user
     |> Ecto.Changeset.change(deleted_at: DateTime.utc_now() |> DateTime.truncate(:second))
     |> Repo.update!()

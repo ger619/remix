@@ -5,7 +5,6 @@ defmodule RemitWeb.UserController do
   alias Remit.User
   alias Remit.Accounts
 
-
   def index(conn, params) do
     page =
       case params["query"] do
@@ -41,12 +40,13 @@ defmodule RemitWeb.UserController do
     user = Accounts.get_user!(id)
     render(conn, "show.html", user: user)
   end
+
   #
-   def edit(conn, %{"id" => id}) do
-     user = Accounts.get_user!(id)
-     changeset = Accounts.change_user(user)
-     render(conn, "edit.html", user: user, changeset: changeset)
-   end
+  def edit(conn, %{"id" => id}) do
+    user = Accounts.get_user!(id)
+    changeset = Accounts.change_user(user)
+    render(conn, "edit.html", user: user, changeset: changeset)
+  end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
     user = Accounts.get_user!(id)
@@ -62,5 +62,13 @@ defmodule RemitWeb.UserController do
     end
   end
 
+  def delete(conn, %{"id" => user_id}) do
+    user =
+      Accounts.get_user!(user_id)
+      |> Accounts.delete_user!()
 
+    conn
+    |> put_flash(:info, "User updated successfully.")
+    |> redirect(to: Routes.user_path(conn, :show, user))
+  end
 end
