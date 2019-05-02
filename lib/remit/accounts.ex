@@ -4,8 +4,8 @@ defmodule Remit.Accounts do
   """
 
   import Ecto.Query, warn: false
-  alias Remit.Repo
 
+  alias Remit.Repo
   alias Remit.User
 
   @doc """
@@ -84,5 +84,11 @@ defmodule Remit.Accounts do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  def delete_user(%User{} = user) do
+    user
+    |> Ecto.Changeset.change(deleted_at: DateTime.utc_now() |> DateTime.truncate(:second))
+    |> Repo.update!()
   end
 end

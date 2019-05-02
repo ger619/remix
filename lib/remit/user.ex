@@ -12,7 +12,7 @@ defmodule Remit.User do
     field :id_number, :string
     field :id_type, :string
     field :password_hash, :string
-
+    field :deleted_at, :utc_datetime
 
     timestamps()
   end
@@ -51,12 +51,9 @@ defmodule Remit.User do
 
   def get_user!(id), do: Repo.get!(User, id)
 
-
   def update_user(%__MODULE__{} = user, attrs) do
     user
     |> changeset(attrs)
     |> Repo.update()
   end
-  
 end
-

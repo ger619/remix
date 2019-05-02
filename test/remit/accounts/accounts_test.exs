@@ -4,11 +4,32 @@ defmodule Remit.AccountsTest do
   alias Remit.Accounts
 
   describe "users" do
-    alias Remit.Accounts.User
+    alias Remit.User
 
-    @valid_attrs %{email: "some email", id_number: "some id_number", id_type: "some id_type", is_admin: "some is_admin", name: "some name", password_hash: "some password_hash", phone_number: "some phone_number"}
-    @update_attrs %{email: "some updated email", id_number: "some updated id_number", id_type: "some updated id_type", is_admin: "some updated is_admin", name: "some updated name", password_hash: "some updated password_hash", phone_number: "some updated phone_number"}
-    @invalid_attrs %{email: nil, id_number: nil, id_type: nil, is_admin: nil, name: nil, password_hash: nil, phone_number: nil}
+    @valid_attrs %{
+      email: "some email",
+      id_number: "some id_number",
+      id_type: "some id_type",
+      name: "some name",
+      password_hash: "some password_hash",
+      phone_number: "some phone_number"
+    }
+    @update_attrs %{
+      email: "some updated email",
+      id_number: "some updated id_number",
+      id_type: "some updated id_type",
+      name: "some updated name",
+      password_hash: "some updated password_hash",
+      phone_number: "some updated phone_number"
+    }
+    @invalid_attrs %{
+      email: nil,
+      id_number: nil,
+      id_type: nil,
+      name: nil,
+      password_hash: nil,
+      phone_number: nil
+    }
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -21,7 +42,7 @@ defmodule Remit.AccountsTest do
 
     test "list_users/0 returns all users" do
       user = user_fixture()
-      assert Accounts.list_users() == [user]
+      assert [user | _] = Accounts.list_users()
     end
 
     test "get_user!/1 returns the user with given id" do
@@ -34,7 +55,6 @@ defmodule Remit.AccountsTest do
       assert user.email == "some email"
       assert user.id_number == "some id_number"
       assert user.id_type == "some id_type"
-      assert user.is_admin == "some is_admin"
       assert user.name == "some name"
       assert user.password_hash == "some password_hash"
       assert user.phone_number == "some phone_number"
@@ -50,7 +70,6 @@ defmodule Remit.AccountsTest do
       assert user.email == "some updated email"
       assert user.id_number == "some updated id_number"
       assert user.id_type == "some updated id_type"
-      assert user.is_admin == "some updated is_admin"
       assert user.name == "some updated name"
       assert user.password_hash == "some updated password_hash"
       assert user.phone_number == "some updated phone_number"
@@ -64,8 +83,8 @@ defmodule Remit.AccountsTest do
 
     test "delete_user/1 deletes the user" do
       user = user_fixture()
-      assert {:ok, %User{}} = Accounts.delete_user(user)
-      assert_raise Ecto.NoResultsError, fn -> Accounts.get_user!(user.id) end
+      assert %User{deleted_at: deleted_at} = Accounts.delete_user(user)
+      assert deleted_at
     end
 
     test "change_user/1 returns a user changeset" do

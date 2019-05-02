@@ -1,12 +1,35 @@
 defmodule RemitWeb.UserControllerTest do
   use RemitWeb.ConnCase
 
-
   alias Remit.Accounts
 
-  @create_attrs %{email: "some email", id_number: "some id_number", id_type: "some id_type", is_admin: "some is_admin", name: "some name", password_hash: "some password_hash", phone_number: "some phone_number"}
-  @update_attrs %{email: "some updated email", id_number: "some updated id_number", id_type: "some updated id_type", is_admin: "some updated is_admin", name: "some updated name", password_hash: "some updated password_hash", phone_number: "some updated phone_number"}
-  @invalid_attrs %{email: nil, id_number: nil, id_type: nil, is_admin: nil, name: nil, password_hash: nil, phone_number: nil}
+  @create_attrs %{
+    email: "some email",
+    id_number: "some id_number",
+    id_type: "some id_type",
+    is_admin: "some is_admin",
+    name: "some name",
+    password_hash: "some password_hash",
+    phone_number: "some phone_number"
+  }
+  @update_attrs %{
+    email: "some updated email",
+    id_number: "some updated id_number",
+    id_type: "some updated id_type",
+    is_admin: "some updated is_admin",
+    name: "some updated name",
+    password_hash: "some updated password_hash",
+    phone_number: "some updated phone_number"
+  }
+  @invalid_attrs %{
+    email: nil,
+    id_number: nil,
+    id_type: nil,
+    is_admin: nil,
+    name: nil,
+    password_hash: nil,
+    phone_number: nil
+  }
 
   def fixture(:user) do
     {:ok, user} = Accounts.create_user(@create_attrs)
@@ -50,8 +73,7 @@ defmodule RemitWeb.UserControllerTest do
     test "renders form for editing chosen user", %{conn: conn, user: user} do
       conn = get(conn, Routes.user_path(conn, :edit, user))
       assert html_response(conn, 200) =~ "Edit User"
-    endlved conflict.
-    ➜  remit git:(profile) ✗
+    end
   end
 
   describe "update user" do
@@ -77,6 +99,7 @@ defmodule RemitWeb.UserControllerTest do
     test "deletes chosen user", %{conn: conn, user: user} do
       conn = delete(conn, Routes.user_path(conn, :delete, user))
       assert redirected_to(conn) == Routes.user_path(conn, :index)
+
       assert_error_sent 404, fn ->
         get(conn, Routes.user_path(conn, :show, user))
       end
@@ -86,6 +109,5 @@ defmodule RemitWeb.UserControllerTest do
   defp create_user(_) do
     user = fixture(:user)
     {:ok, user: user}
-
   end
 end

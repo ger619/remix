@@ -9,7 +9,7 @@ defmodule Remit.Repo.Migrations.CreateUsers do
       add :id_number, :string
       add :id_type, :string
       add :password_hash, :string
-      add :is_admin, :boolean,  default: false
+      add :deleted_at, :timestamptz
       timestamps()
     end
 
