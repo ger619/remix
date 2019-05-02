@@ -49,12 +49,6 @@ defmodule Remit.User do
     |> Repo.insert()
   end
 
-  def create_user(params) do
-    %__MODULE__{}
-    |> changeset(params)
-    |> Repo.insert()
-  end
-
   def get_user!(id), do: Repo.get!(User, id)
 
 
@@ -63,13 +57,6 @@ defmodule Remit.User do
     |> changeset(attrs)
     |> Repo.update()
   end
-
-
-  def search_query(q) do
-
-    search_query = "%#{q}%"
-    from u in __MODULE__, where: ilike(u.name, ^search_query), or_where: ilike(u.id_number, ^search_query)
-
-  end
+  
 end
 
