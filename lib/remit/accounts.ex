@@ -79,7 +79,7 @@ defmodule Remit.Accounts do
   ## Examples
 
       iex> change_user(user)
-      %Ecto.Changeset{source: %User{}}
+      %Ecto.Changeset{source: %User{}}Repo.get!(Profile, id)
 
   """
   def change_user(%User{} = user) do
@@ -91,4 +91,5 @@ defmodule Remit.Accounts do
     |> Ecto.Changeset.change(deleted_at: DateTime.utc_now() |> DateTime.truncate(:second))
     |> Repo.update!()
   end
-end
+end    
+

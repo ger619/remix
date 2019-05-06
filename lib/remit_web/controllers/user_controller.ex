@@ -41,7 +41,7 @@ defmodule RemitWeb.UserController do
     render(conn, "show.html", user: user)
   end
 
-  #
+
   def edit(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
     changeset = Accounts.change_user(user)

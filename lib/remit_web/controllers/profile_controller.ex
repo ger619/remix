@@ -4,17 +4,27 @@ defmodule RemitWeb.ProfileController do
   alias Remit.Repo
   alias Remit.Profile
 
-  def index(conn, _params) do
-    render(conn, "index.html")
+  def index(conn, params) do
+    page =
+      case params["query"] do
+        nil ->
+          Profile
+
+        term ->
+          Profile.search_query(term)
+      end
+      |> Repo.paginate(params)
+    render(conn, "index.html", profile: page.entries, page: page)
+
   end
 
   def new(conn, _params) do
     changeset = Profile.changeset(%Profile{})
-    render(conn, "new.html", changeset: changeset)
+    render conn, "new.html", changeset: changeset
   end
 
   def create(conn, %{"profile" => profile_params}) do
-    case Profile.create(profile_params, "business") do
+    case Profile.create(profile_params,"business" ) do
       {:ok, profile} ->
         conn
         |> redirect(to: Routes.profile_path(conn, :show, profile))
@@ -26,12 +36,12 @@ defmodule RemitWeb.ProfileController do
 
   def edit(conn, %{"id" => id}) do
     profile = Repo.get!(Profile, id)
-    changeset = Profile.changeset(%Profile{}, %{})
+    changeset = Profile.edit_profile(profile)
     render(conn, "edit.html", changeset: changeset, profile: profile)
   end
 
   def update(conn, %{"id" => id, "profile" => profile_params}) do
-    profile = Repo.get!(Profile, id)
+    profile = Profile.get_profile!(id)
 
     case Profile.update_profile(profile, profile_params) do
       {:ok, profile} ->
@@ -47,4 +57,17 @@ defmodule RemitWeb.ProfileController do
     profile = Repo.get!(Profile, id)
     render(conn, "show.html", profile: profile)
   end
+
+  def delete(conn, %{"id" => id}) do
+    profile =
+    Repo.get!(Profile, id)
+    |> Profile.delete_profile()
+
+    conn
+    |> put_flash(:info, "Profile deleted successfully")
+    |> redirect(to: Routes.profile_path(conn, :show, profile))
+
+  end
+
 end
+

@@ -1,0 +1,38 @@
+<h1>Listing Profiles</h1>
+<div class="col-md-8">
+    <%= form_for @conn, Routes.profile_path(@conn, :index), [method: :get, class: "pull-right"], fn f -> %>
+    <%= search_input f, :query %><%= submit "Search" %>
+    <% end %>
+
+  </div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th> Name </th>
+            <th> Currency </th> 
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <%= for profile <- @profile do %>
+            <tr>
+                <td><%= profile.name %></td>
+                <td><%= profile.currency %></td>
+
+                <td class="text-right">
+                    <%= link "show", to: Routes.profile_path(@conn, :show, profile) %>
+                    <%= link "edit", to: Routes.profile_path(@conn, :edit, profile) %>
+                    
+                </td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+
+<span><%= link "New Profile", to: Routes.profile_path(@conn, :new)%></span>
+
+
+
+ 
