@@ -49,9 +49,9 @@ defmodule Remit.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_user(attrs \\ %{}) do
+  def create_user(user) do
     %User{}
-    |> User.changeset(attrs)
+    |> User.changeset(user)
     |> Repo.insert()
   end
 

@@ -4,6 +4,8 @@ defmodule Remit.User do
   import Ecto.Query
 
   alias Remit.Repo
+  alias Remit.Account
+  alias Remit.Profile
 
   schema "users" do
     field :name, :string, null: false
@@ -12,7 +14,6 @@ defmodule Remit.User do
     field :id_number, :string
     field :id_type, :string
     field :password_hash, :string
-
 
     timestamps()
   end
@@ -44,19 +45,12 @@ defmodule Remit.User do
   end
 
   def create_user(params) do
-    %__MODULE__{}
-    |> changeset(params)
-    |> Repo.insert()
-  end
-
-  def create_user(params) do
-    %__MODULE__{}
+   user = %__MODULE__{}
     |> changeset(params)
     |> Repo.insert()
   end
 
   def get_user!(id), do: Repo.get!(User, id)
-
 
   def update_user(%__MODULE__{} = user, attrs) do
     user
@@ -64,12 +58,7 @@ defmodule Remit.User do
     |> Repo.update()
   end
 
+ # def create_account(user) do
 
-  def search_query(q) do
-
-    search_query = "%#{q}%"
-    from u in __MODULE__, where: ilike(u.name, ^search_query), or_where: ilike(u.id_number, ^search_query)
-
-  end
+  #end
 end
-

@@ -8,6 +8,7 @@ defmodule Remit.Repo.Migrations.CreateAccounts do
       add :debits, :decimal, null: false, default: 0
       add :balance, :decimal, null: false, default: 0
 
+
       timestamps()
     end
 
