@@ -7,9 +7,6 @@ defmodule RemitWeb.UserController do
   alias Remit.Account.Account
 
 
-
-
-
   def index(conn, params) do
     page =
       case params["query"] do

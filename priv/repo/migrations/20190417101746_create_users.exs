@@ -1,5 +1,6 @@
 defmodule Remit.Repo.Migrations.CreateUsers do
   use Ecto.Migration
+  alias Remit.User
 
   def change do
     create table(:users) do
@@ -10,7 +11,7 @@ defmodule Remit.Repo.Migrations.CreateUsers do
       add :id_type, :string
       add :password_hash, :string
       add :is_admin, :boolean, default: false
-      add :profile_id, references(:profiles) 
+     
       timestamps()
     end
 

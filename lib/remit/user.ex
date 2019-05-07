@@ -58,7 +58,4 @@ defmodule Remit.User do
     |> Repo.update()
   end
 
- # def create_account(user) do
-
-  #end
 end
