@@ -7,6 +7,7 @@ defmodule Remit.Accounts do
 
   alias Remit.Repo
   alias Remit.User
+  alias Remit.Profile
 
   @doc """
   Returns the list of users.
@@ -50,9 +51,28 @@ defmodule Remit.Accounts do
 
   """
   def create_user(user) do
-    %User{}
-    |> User.changeset(user)
-    |> Repo.insert()
+    Repo.transaction(fn ->
+      changeset =
+        %User{}
+        |> User.changeset(user)
+
+      result = Repo.insert(changeset)
+
+      case result do
+        {:ok, user} ->
+          case Profile.create(%{name: user.name, currency: "KES"}, "user") do
+            {:ok, _} ->
+              user
+
+            {:error, _} ->
+              changeset = changeset |> Ecto.Changeset.add_error(:name, "already exists.")
+              Repo.rollback(%{changeset | action: :insert})
+          end
+
+        {:error, changeset} ->
+          Repo.rollback(changeset)
+      end
+    end)
   end
 
   @doc """
@@ -79,7 +99,7 @@ defmodule Remit.Accounts do
   ## Examples
 
       iex> change_user(user)
-      %Ecto.Changeset{source: %User{}}
+      %Ecto.Changeset{source: %User{}}Repo.get!(Profile, id)
 
   """
   def change_user(%User{} = user) do

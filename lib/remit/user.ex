@@ -3,8 +3,6 @@ defmodule Remit.User do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Remit.Repo
-
   schema "users" do
     field :name, :string, null: false
     field :phone_number, :string, null: false
@@ -13,7 +11,7 @@ defmodule Remit.User do
     field :id_type, :string
     field :password_hash, :string
     field :deleted_at, :utc_datetime
-    field :super_admin, :boolean
+    field :super_admin, :boolean, default: false
 
     timestamps()
   end
@@ -38,23 +36,5 @@ defmodule Remit.User do
     from x in __MODULE__,
       where: ilike(x.name, ^search_query),
       or_where: ilike(x.id_number, ^search_query)
-  end
-
-  def change_user() do
-    %__MODULE__{} |> changeset(%{})
-  end
-
-  def create_user(params) do
-    %__MODULE__{}
-    |> changeset(params)
-    |> Repo.insert()
-  end
-
-  def get_user!(id), do: Repo.get!(User, id)
-
-  def update_user(%__MODULE__{} = user, attrs) do
-    user
-    |> changeset(attrs)
-    |> Repo.update()
   end
 end

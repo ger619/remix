@@ -2,6 +2,7 @@ defmodule Remit.Profile do
   use Ecto.Schema
 
   import Ecto.Changeset
+  import Ecto.Query
 
   alias Remit.Repo
   alias Remit.User
@@ -37,10 +38,18 @@ defmodule Remit.Profile do
     end
   end
 
+  def search_query(q) do
+    search_query = "%#{q}"
+
+    from x in __MODULE__,
+      where: ilike(x.name, ^search_query)
+  end
+
   def create(params, profile_type) when profile_type in ["user", "business"] do
     changeset =
-      changeset(%__MODULE__{}, params)
-      |> put_change(:type, profile_type)
+      %__MODULE__{}
+      |> change(type: profile_type)
+      |> changeset(params)
 
     Repo.transaction(fn ->
       case Repo.insert(changeset) do
@@ -61,9 +70,25 @@ defmodule Remit.Profile do
     |> Repo.insert!()
   end
 
+  def list_profiles do
+    Repo.all(__MODULE__)
+  end
+
+  def get_profile!(id), do: Repo.get!(__MODULE__, id)
+
   def update_profile(%__MODULE__{} = profile, params) do
     profile
     |> changeset(params)
     |> Repo.update()
+  end
+
+  def delete_profile(%__MODULE__{} = profile) do
+    profile
+    |> change(deleted_at: DateTime.utc_now() |> DateTime.truncate(:second))
+    |> Repo.update!()
+  end
+
+  def edit_profile(%__MODULE__{} = profile) do
+    __MODULE__.changeset(profile, %{})
   end
 end
