@@ -3,6 +3,7 @@ defmodule RemitWeb.ProfileController do
 
   alias Remit.Repo
   alias Remit.Profile
+  alias Remit.Account
 
   def index(conn, _params) do
     render(conn, "index.html")

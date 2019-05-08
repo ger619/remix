@@ -48,7 +48,6 @@ defmodule Remit.MixProject do
       {:slugger, "~> 0.3 "},
       {:scrivener, "~> 2.7"},
       {:scrivener_ecto, "~> 2.2"},
-
       {:scrivener_html, "~> 1.8"}
     ]
   end

@@ -4,6 +4,7 @@ defmodule RemitWeb.UserController do
   alias Remit.Repo
   alias Remit.User
   alias Remit.Accounts
+  alias Remit.Account.Account
 
   def index(conn, params) do
     page =
@@ -27,6 +28,8 @@ defmodule RemitWeb.UserController do
   def create(conn, %{"user" => user_params}) do
     case User.create_user(user_params) do
       {:ok, user} ->
+        Account.create_account(user)
+
         conn
         |> put_flash(:info, "User created successfully.")
         |> redirect(to: Routes.user_path(conn, :show, user))
@@ -41,7 +44,6 @@ defmodule RemitWeb.UserController do
     render(conn, "show.html", user: user)
   end
 
-  #
   def edit(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
     changeset = Accounts.change_user(user)

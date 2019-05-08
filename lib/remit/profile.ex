@@ -4,6 +4,7 @@ defmodule Remit.Profile do
   import Ecto.Changeset
 
   alias Remit.Repo
+  alias Remit.User
 
   alias Remit.Account.Account
 
@@ -12,6 +13,7 @@ defmodule Remit.Profile do
     field :slug, :string
     field :type, :string
     field :currency, :string
+    belongs_to(:user, User)
 
     timestamps()
   end

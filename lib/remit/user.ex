@@ -13,6 +13,7 @@ defmodule Remit.User do
     field :id_type, :string
     field :password_hash, :string
     field :deleted_at, :utc_datetime
+    field :super_admin, :boolean
 
     timestamps()
   end

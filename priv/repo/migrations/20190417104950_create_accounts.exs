@@ -3,10 +3,12 @@ defmodule Remit.Repo.Migrations.CreateAccounts do
 
   def change do
     create table(:accounts) do
-      add :profile_id, references(:profiles), null: false
+      add :profile_id, references(:profiles)
       add :credits, :decimal, null: false, default: 0
       add :debits, :decimal, null: false, default: 0
       add :balance, :decimal, null: false, default: 0
+      add :user_id, references(:users)
+
 
       timestamps()
     end
