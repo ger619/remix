@@ -12,7 +12,7 @@ defmodule Remit.User do
     field :id_number, :string
     field :id_type, :string
     field :password_hash, :string
-    # field :deleted_at, :utc_datetime
+    field :deleted_at, :utc_datetime
 
     timestamps()
   end

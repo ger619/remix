@@ -44,7 +44,10 @@ defmodule Remit.Profile do
   end
 
   def create(params, profile_type) when profile_type in ["user", "business"] do
-    changeset = changeset(%__MODULE__{}, Map.put(params, "type", profile_type))
+    changeset =
+      %__MODULE__{}
+      |> change(type: profile_type)
+      |> changeset(params)
 
     Repo.transaction(fn ->
       case Repo.insert(changeset) do
