@@ -71,6 +71,7 @@ defmodule RemitWeb.ProfileControllerTest do
 
     conn = delete(conn, Routes.profile_path(conn, :delete, profile))
     assert redirected_to(conn) == Routes.profile_path(conn, :show, profile)
-    assert %{archived: true} = Repo.get!(Profile, profile.id)
+    %{deleted_at: deleted_at} = Repo.get!(Profile, profile.id)
+    assert deleted_at
   end
 end

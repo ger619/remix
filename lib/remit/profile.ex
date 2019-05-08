@@ -39,18 +39,16 @@ defmodule Remit.Profile do
   def search_query(q) do
     search_query = "%#{q}"
 
-    from x in  __MODULE__,
+    from x in __MODULE__,
       where: ilike(x.name, ^search_query)
   end
 
-
   def create(params, profile_type) when profile_type in ["user", "business"] do
-    changeset =
-      changeset(%__MODULE__{}, Map.put(params, "type" , profile_type))
+    changeset = changeset(%__MODULE__{}, Map.put(params, "type", profile_type))
 
-      Repo.transaction(fn ->
-        case Repo.insert(changeset) do
-          {:ok, profile} ->
+    Repo.transaction(fn ->
+      case Repo.insert(changeset) do
+        {:ok, profile} ->
           create_account!(profile)
           profile
 
@@ -71,7 +69,7 @@ defmodule Remit.Profile do
     Repo.all(__MODULE__)
   end
 
-  def get_profile!(id), do: Repo.get!(Profile, id)
+  def get_profile!(id), do: Repo.get!(__MODULE__, id)
 
   def update_profile(%__MODULE__{} = profile, params) do
     profile
@@ -80,8 +78,9 @@ defmodule Remit.Profile do
   end
 
   def delete_profile(%__MODULE__{} = profile) do
-    Repo.delete(profile)
-
+    profile
+    |> change(deleted_at: DateTime.utc_now() |> DateTime.truncate(:second))
+    |> Repo.update!()
   end
 
   def edit_profile(%__MODULE__{} = profile) do
