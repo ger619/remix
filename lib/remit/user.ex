@@ -12,6 +12,7 @@ defmodule Remit.User do
     field :password_hash, :string
     field :deleted_at, :utc_datetime
     field :super_admin, :boolean, default: false
+    field :require_password_change, :boolean, default: false
 
     timestamps()
   end

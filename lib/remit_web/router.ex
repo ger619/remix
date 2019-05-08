@@ -9,6 +9,9 @@ defmodule RemitWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :authenticated do
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -17,8 +20,12 @@ defmodule RemitWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/profiles", ProfileController, except: [:delete]
+  end
 
+  scope "/", RemitWeb do
+    pipe_through [:browser, :authenticated]
+
+    resources "/profiles", ProfileController, except: [:delete]
     resources "/users", UserController
   end
 
