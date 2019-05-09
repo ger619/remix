@@ -3,6 +3,8 @@ defmodule Remit.User do
   import Ecto.Changeset
   import Ecto.Query
 
+  alias Remit.Session
+
   schema "users" do
     field :name, :string, null: false
     field :phone_number, :string, null: false
@@ -13,6 +15,7 @@ defmodule Remit.User do
     field :deleted_at, :utc_datetime
     field :super_admin, :boolean, default: false
     field :require_password_change, :boolean, default: false
+    has_many :sessions, Session, on_delete: :delete_all
 
     timestamps()
   end
@@ -21,15 +24,18 @@ defmodule Remit.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:name, :phone_number, :email, :id_number, :id_type, :password_hash])
-    |> validate_required([
-      :name,
-      :phone_number,
-      :email,
-      :id_number,
-      :id_type,
-      :password_hash
-    ])
+    |> validate_required([:name, :phone_number, :email, :id_number, :id_type, :password_hash])
+    |> password_hash
   end
+
+  # If you are using Bcrypt or Pbkdf2, change Argon2 to Bcrypt or Pbkdf2
+  defp password_hash(
+         %Ecto.Changeset{valid?: true, changes: %{password_hash: password_hash}} = changeset
+       ) do
+    change(changeset, Argon2.add_hash(password_hash))
+  end
+
+  defp password_hash(changeset), do: changeset
 
   def search_query(q) do
     search_query = "%#{q}%"

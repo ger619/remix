@@ -17,4 +17,6 @@ config :remit, Remit.Repo,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
+config(:argon2_elixir)
+
 import_config "dev.local.exs"
