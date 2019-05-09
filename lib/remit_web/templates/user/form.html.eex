@@ -25,12 +25,10 @@
   <%= text_input f, :id_type %>
   <%= error_tag f, :id_type %>
 
-  <%= label f, :password_hash %>
-  <%= text_input f, :password_hash %>
-  <%= error_tag f, :password_hash %>
-
+  <%= checkbox :user, :Super_admin, checked: false %> Super Admin
 
   <div>
     <%= submit "Save" %>
   </div>
+
 <% end %>

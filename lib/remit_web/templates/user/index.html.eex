@@ -22,7 +22,6 @@
       <th>Email</th>
       <th>Id number</th>
       <th>Id type</th>
-      <th>Password</th>
 
       <th></th>
     </tr>
@@ -35,7 +34,6 @@
       <td><%= user.email %></td>
       <td><%= user.id_number %></td>
       <td><%= user.id_type %></td>
-      <td><%= user.password_hash %></td>
 
       <td>
         <%= link "Show", to: Routes.user_path(@conn, :show, user) %>

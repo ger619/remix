@@ -9,10 +9,9 @@ defmodule Remit.User do
     field :email, :string
     field :id_number, :string
     field :id_type, :string
-    field :password_hash, :string
     field :deleted_at, :utc_datetime
     field :super_admin, :boolean, default: false
-    field :require_password_change, :boolean, default: false
+    field :require_password_change, :boolean, virtual: true
 
     timestamps()
   end
@@ -20,15 +19,16 @@ defmodule Remit.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :phone_number, :email, :id_number, :id_type, :password_hash])
+    |> cast(attrs, [:name, :phone_number, :email, :id_number, :id_type, :super_admin])
     |> validate_required([
       :name,
       :phone_number,
       :email,
       :id_number,
       :id_type,
-      :password_hash
+      :super_admin,
     ])
+    |> unique_constraint(:phone_number)
   end
 
   def search_query(q) do
