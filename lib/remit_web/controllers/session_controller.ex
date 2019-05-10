@@ -2,9 +2,8 @@ defmodule RemitWeb.SessionController do
   use RemitWeb, :controller
 
   alias Phauxth.Remember
-  alias Remit.Session
   alias Remit.Sessions.Sessionhandler
-  alias RemitWeb.Auth.Login
+  alias Phauxth.Login
 
   # the following plug is defined in the controllers/authorize.ex file
 
@@ -27,22 +26,16 @@ defmodule RemitWeb.SessionController do
     end
   end
 
-  def delete(%Plug.Conn{assigns: %{current_user: %{id: user_id}}} = conn, %{"id" => session_id}) do
-    case Sessionhandler.get_session(session_id) do
-      %Session{user_id: ^user_id} = session ->
-        Sessionhandler.delete_session(session)
-
-        conn
-        |> delete_session(:phauxth_session_id)
-        |> Remember.delete_rem_cookie()
-        |> put_flash(:info, "User successfully logged out.")
-        |> redirect(to: Routes.page_path(conn, :index))
-
-      _ ->
-        conn
-        |> put_flash(:error, "Unauthorized")
-        |> redirect(to: Routes.user_path(conn, :index))
+  def delete(conn, %{"id" => session_id}) do
+    if session = Sessionhandler.get_session(session_id) do
+      Sessionhandler.delete_session(session)
     end
+
+    conn
+    |> delete_session(:phauxth_session_id)
+    |> Remember.delete_rem_cookie()
+    |> put_flash(:info, "User successfully logged out.")
+    |> redirect(to: Routes.page_path(conn, :index))
   end
 
   defp add_session(conn, user, params) do

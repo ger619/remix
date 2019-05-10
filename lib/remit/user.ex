@@ -25,14 +25,15 @@ defmodule Remit.User do
     user
     |> cast(attrs, [:name, :phone_number, :email, :id_number, :id_type, :password_hash])
     |> validate_required([:name, :phone_number, :email, :id_number, :id_type, :password_hash])
+    |> unique_constraint(:phone_number)
     |> password_hash
   end
 
   # If you are using Bcrypt or Pbkdf2, change Argon2 to Bcrypt or Pbkdf2
   defp password_hash(
-         %Ecto.Changeset{valid?: true, changes: %{password_hash: password_hash}} = changeset
+         %Ecto.Changeset{valid?: true, changes: %{password_hash: password}} = changeset
        ) do
-    change(changeset, Argon2.add_hash(password_hash))
+    put_change(changeset, :password_hash, Bcrypt.hash_pwd_salt(password))
   end
 
   defp password_hash(changeset), do: changeset

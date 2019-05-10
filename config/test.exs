@@ -17,6 +17,5 @@ config :remit, Remit.Repo,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
-config(:argon2_elixir)
-
+config :bcrypt_elixir, log_rounds: 4
 import_config "dev.local.exs"

@@ -28,7 +28,7 @@ defmodule RemitWeb.Router do
     pipe_through [:browser, :guest_check]
 
     get "/", PageController, :index
-    resources "/sessions", SessionController, only: [:new, :create, :delete]
+    resources "/sessions", SessionController, only: [:new, :create]
   end
 
   scope "/", RemitWeb do
@@ -36,10 +36,7 @@ defmodule RemitWeb.Router do
 
     resources "/profiles", ProfileController, except: [:delete]
     resources "/users", UserController, except: [:delete]
+    get "/dashboard", PageController, :dashboard
+    resources "/sessions", SessionController, only: [:delete]
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", RemitWeb do
-  # pipe_through :api
-  # end
 end

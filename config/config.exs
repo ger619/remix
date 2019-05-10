@@ -22,7 +22,8 @@ config :scrivener_html,
 
 # Configures Phauxth authentication
 config :phauxth,
-  user_context: Remit,
+  user_context: Remit.Accounts,
+  crypto_module: Bcrypt,
   token_module: RemitWeb.Auth.Token
 
 # If you're using Guardian in yobSub, adapter: Phoenix.PubSub.PG2]

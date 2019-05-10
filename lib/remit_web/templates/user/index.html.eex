@@ -10,6 +10,8 @@
 
   </div>
 
+
+
 </div>
 
 
@@ -36,6 +38,7 @@
       <td><%= user.id_number %></td>
       <td><%= user.id_type %></td>
       <td><%= user.password_hash %></td>
+
 
       <td>
         <%= link "Show", to: Routes.user_path(@conn, :show, user) %>

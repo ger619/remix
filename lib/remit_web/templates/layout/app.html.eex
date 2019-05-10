@@ -14,8 +14,14 @@
       <section class="container">
         <nav role="navigation">
           <ul>
-            <li><a href="">Remit App</a></li>
-
+            <li><%= link "Remit", to: Routes.page_path(@conn, :index) %></li>
+            <%= if @current_user do %>
+                <li><%= link "Users", to: Routes.user_path(@conn, :index) %></li>
+                <li><%= link @current_user.phone_number, to: Routes.user_path(@conn, :show, @current_user) %></li>
+                <li><%= link "Logout", to: Routes.session_path(@conn, :delete, current_session(@conn)), method: :delete %></li>
+              <% else %>
+                <li><%= link "Login", to: Routes.session_path(@conn, :new) %></li>
+              <% end %>
 
           </ul>
         </nav>

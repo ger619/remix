@@ -38,7 +38,7 @@ defmodule Remit.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user(id), do: Repo.get(User, id)
 
   @doc """
   Gets a user based on the params.
@@ -47,7 +47,7 @@ defmodule Remit.Accounts do
   """
   def get_by(%{"session_id" => session_id}) do
     with %Session{user_id: user_id} <- Sessionhandler.get_session(session_id),
-         do: get_user!(user_id)
+         do: get_user(user_id)
   end
 
   def get_by(%{"phone_number" => phone_number}) do
@@ -68,10 +68,6 @@ defmodule Remit.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-
-  # def get_by(%{"session_id" => session_id}) do
-  #   with %Session{user_id: user_id} <- Sessionhandler.get_session(session_id)
-  # end
 
   def create_user(user) do
     Repo.transaction(fn ->

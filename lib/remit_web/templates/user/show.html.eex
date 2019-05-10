@@ -28,8 +28,8 @@
   </li>
 
   <li>
-    <strong>Password hash:</strong>
-    <%= @user.password_hash %>
+    <strong>Password hash: </strong>
+    <%= @user.id_type %>
   </li>
 
 </ul>

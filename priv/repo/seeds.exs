@@ -16,10 +16,11 @@ alias Remit.User
 Repo.insert!(
   Ecto.Changeset.change(%User{}, %{
     name: "Admin",
-    phone_number: "020222780",
+    phone_number: "123456",
     email: "admin@app.com",
     id_number: "32424",
-    password_hash: "admin123"
+    id_type: "national id",
+    password_hash: Bcrypt.hash_pwd_salt("admin123")
   })
 )
 
@@ -29,7 +30,7 @@ Repo.insert!(
     phone_number: "696896",
     email: "adwedmin@app.com",
     id_number: "32424",
-    password_hash: "admin123"
+    password_hash: Bcrypt.hash_pwd_salt("admin123")
   })
 )
 
@@ -39,7 +40,7 @@ Repo.insert!(
     phone_number: "9820222",
     email: "admin@app.com",
     id_number: "32424",
-    password_hash: "admin123"
+    password_hash: Bcrypt.hash_pwd_salt("admin123")
   })
 )
 
@@ -49,26 +50,6 @@ Repo.insert!(
     phone_number: "020222",
     email: "admin@app.com",
     id_number: "32424",
-    password_hash: "admin123"
-  })
-)
-
-Repo.insert!(
-  Ecto.Changeset.change(%User{}, %{
-    name: "Admin6",
-    phone_number: "6020222",
-    email: "admin6@app.com",
-    id_number: "632424",
-    password_hash: "6admin123"
-  })
-)
-
-Repo.insert!(
-  Ecto.Changeset.change(%User{}, %{
-    name: "Admin7",
-    phone_number: "720222",
-    email: "admin7@app.com",
-    id_number: "732424",
-    password_hash: "7admin123"
+    password_hash: Bcrypt.hash_pwd_salt("admin123")
   })
 )

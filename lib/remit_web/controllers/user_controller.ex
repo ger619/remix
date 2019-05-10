@@ -31,7 +31,6 @@ defmodule RemitWeb.UserController do
       {:ok, %User{phone_number: phone_number} = user} ->
         Log.info(%Log{user: user.id, message: "user created"})
         key = Token.sign(%{"phone_number" => phone_number})
-        Phone_number.confirm_request(phone_number, key)
 
         conn
         |> put_flash(:info, "User created successfully.")
@@ -42,8 +41,7 @@ defmodule RemitWeb.UserController do
     end
   end
 
-  def show(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
-    user = if id == to_string(user.id), do: user, else: Accounts.get_user(id)
+  def show(%Plug.Conn{assigns: %{current_user: user}} = conn, _) do
     render(conn, "show.html", user: user)
   end
 
