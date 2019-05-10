@@ -45,3 +45,4 @@ npm-debug.log
 # Editor directories
 /.vscode
 /.elixir_ls
+.DS_Store

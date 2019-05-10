@@ -18,4 +18,8 @@ config :remit, Remit.Repo,
   pool: Ecto.Adapters.SQL.Sandbox
 
 config :bcrypt_elixir, log_rounds: 4
+<<<<<<< HEAD
+=======
+
+>>>>>>> bb769f07aa0f7d2615a12d238bd2ea24f20fa72b
 import_config "dev.local.exs"
