@@ -49,7 +49,6 @@ defmodule Remit.MixProject do
       {:scrivener_html, "~> 1.8"},
       {:phauxth, "~> 2.2"},
       {:comeonin, "~> 5.1"},
-      {:bcrypt_elixir, "~> 2.0"},
       {:elixir_make, "~> 0.5.2"},
       {:plug, "~> 1.8"},
       {:telemetry, "~> 0.4.0"},
