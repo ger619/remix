@@ -10,7 +10,7 @@ defmodule RemitWeb.UserController do
       case params["query"] do
         nil ->
           User
-        
+
         term ->
           User.search_query(term)
       end
@@ -24,10 +24,6 @@ defmodule RemitWeb.UserController do
     render(conn, "new.html", changeset: changeset)
   end
 
-  def random_pass(25) do
-    :crypto.strong_rand_bytes(25) |> Base.url_encode64 |> binary_part(0, 25)
-  end
-
   def create(conn, %{"user" => user_params}) do
     case Accounts.create_user(user_params) do
       {:ok, user} ->
@@ -38,6 +34,10 @@ defmodule RemitWeb.UserController do
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
+  end
+
+  defp random_pass(25) do
+    :crypto.strong_rand_bytes(25) |> Base.url_encode64() |> binary_part(0, 25)
   end
 
   def show(conn, %{"id" => id}) do

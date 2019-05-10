@@ -7,11 +7,11 @@ defmodule Remit.Repo.Migrations.CreateUsers do
       add :phone_number, :string, null: false
       add :email, :string
       add :id_number, :string
-      add :id_type, :string
+      add :id_type, references(:id_types, column: :slug, type: :string)
       add :password_hash, :string
       add :deleted_at, :timestamptz
-      add :super_admin, :boolean, null: false, default: true
-      add :require_password_change, :boolean, null: false, default: true
+      add :super_admin, :boolean, null: false, default: false
+      add :require_password_change, :boolean, null: false, default: false
 
       timestamps()
     end

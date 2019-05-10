@@ -11,7 +11,8 @@ defmodule Remit.User do
     field :id_type, :string
     field :deleted_at, :utc_datetime
     field :super_admin, :boolean, default: false
-    field :require_password_change, :boolean, virtual: true
+    field :require_password_change, :boolean, default: false
+    field :password, :string, virtual: true
 
     timestamps()
   end
@@ -26,9 +27,19 @@ defmodule Remit.User do
       :email,
       :id_number,
       :id_type,
-      :super_admin,
+      :super_admin
     ])
     |> unique_constraint(:phone_number)
+    |> update_password_hash_if_changed()
+  end
+
+  defp update_password_hash_if_changed(changeset) do
+    if new_passwd = get_change(changeset, :password) do
+      # todo: hash password after authentication is merged
+      changeset |> put_change(:password_hash, new_passwd)
+    else
+      changeset
+    end
   end
 
   def search_query(q) do

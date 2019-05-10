@@ -54,6 +54,7 @@ defmodule Remit.Accounts do
     Repo.transaction(fn ->
       changeset =
         %User{}
+        |> Ecto.Changeset.change(require_password_change: true)
         |> User.changeset(user)
 
       result = Repo.insert(changeset)
