@@ -18,7 +18,7 @@ config :remit, RemitWeb.Endpoint,
   pubsub: [name: Remit.PubSub, adapter: Phoenix.PubSub.PG2]
 
 config :scrivener_html,
-  routes_helper: Remit.Router.Helpers
+  routes_helper: RemitWeb.Router.Helpers
 
 # Configures Phauxth authentication
 config :phauxth,
