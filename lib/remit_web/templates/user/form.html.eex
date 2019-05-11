@@ -1,4 +1,4 @@
-<%= form_for @changeset, @action, fn f -> %>
+<%= form_for @changeset , @action, fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
       <p>Oops, something went wrong! Please check the errors below.</p>
@@ -24,11 +24,6 @@
   <%= label f, :id_type %>
   <%= text_input f, :id_type %>
   <%= error_tag f, :id_type %>
-
-  <%= label f, :password_hash %>
-  <%= text_input f, :password_hash %>
-  <%= error_tag f, :password_hash %>
-
 
   <div>
     <%= submit "Save" %>

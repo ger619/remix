@@ -10,6 +10,8 @@ defmodule Remit.Repo.Migrations.CreateUsers do
       add :id_type, :string
       add :password_hash, :string
       add :deleted_at, :timestamptz
+      add :confirmed_at, :utc_datetime
+      add :reset_sent_at, :utc_datetime
       add :super_admin, :boolean, null: false, default: false
       add :require_password_change, :boolean, null: false, default: false
 

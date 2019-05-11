@@ -18,12 +18,15 @@ config :remit, RemitWeb.Endpoint,
   pubsub: [name: Remit.PubSub, adapter: Phoenix.PubSub.PG2]
 
 config :scrivener_html,
-    routes_helper: Remit.Router.Helpers
+  routes_helper: RemitWeb.Router.Helpers
 
+# Configures Phauxth authentication
+config :phauxth,
+  user_context: Remit.Accounts,
+  crypto_module: Bcrypt,
+  token_module: RemitWeb.Auth.Token
 
 # If you're using Guardian in yobSub, adapter: Phoenix.PubSub.PG2]
-
-
 
 # Configures Elixir's Logger
 config :logger, :console,
