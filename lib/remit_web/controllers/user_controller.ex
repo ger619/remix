@@ -1,11 +1,9 @@
 defmodule RemitWeb.UserController do
   use RemitWeb, :controller
 
-  alias Phauxth.Log
   alias Remit.Repo
   alias Remit.User
   alias Remit.Accounts
-  alias RemitWeb.Auth.Token
 
   def index(conn, params) do
     page =
@@ -28,29 +26,31 @@ defmodule RemitWeb.UserController do
 
   def create(conn, %{"user" => user_params}) do
     case Accounts.create_user(user_params) do
-      {:ok, %User{phone_number: phone_number} = user} ->
-        Log.info(%Log{user: user.id, message: "user created"})
-        key = Token.sign(%{"phone_number" => phone_number})
-
+      {:ok, user} ->
         conn
         |> put_flash(:info, "User created successfully.")
-        |> redirect(to: Routes.session_path(conn, :new))
+        |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
   end
 
-  def show(%Plug.Conn{assigns: %{current_user: user}} = conn, _) do
+  def show(conn, %{"id" => user_id}) do
+    user = Accounts.get_user!(user_id)
     render(conn, "show.html", user: user)
   end
 
-  def edit(%Plug.Conn{assigns: %{current_user: user}} = conn, _) do
+  def edit(conn, %{"id" => user_id}) do
+    user = Accounts.get_user!(user_id)
     changeset = Accounts.change_user(user)
+
     render(conn, "edit.html", user: user, changeset: changeset)
   end
 
-  def update(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"user" => user_params}) do
+  def update(conn, %{"id" => user_id, "user" => user_params}) do
+    user = Accounts.get_user!(user_id)
+
     case Accounts.update_user(user, user_params) do
       {:ok, user} ->
         conn
