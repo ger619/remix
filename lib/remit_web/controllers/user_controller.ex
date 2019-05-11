@@ -62,11 +62,13 @@ defmodule RemitWeb.UserController do
     end
   end
 
-  # def delete(%Plug.Conn{assigns: %{current_user: user}} = conn, _) do
-  #   {:ok, _user} = Accounts.delete_user(user)
-  #
-  #   conn
-  #   |> put_flash(:info, "User deleted successfully.")
-  #   |> redirect(to: Routes.session_path(conn, :new))
-  # end
+  def delete(conn, %{"id" => user_id}) do
+    user =
+      Accounts.get_user!(user_id)
+      |> Accounts.delete_user!()
+
+    conn
+    |> put_flash(:info, "User deleted successfully.")
+    |> redirect(to: Routes.user_path(conn, :show, user))
+  end
 end

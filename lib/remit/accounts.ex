@@ -125,9 +125,17 @@ defmodule Remit.Accounts do
     User.changeset(user, %{})
   end
 
-  # def delete_user!(%User{} = user) do
-  #   user
-  #   |> Ecto.Changeset.change(deleted_at: DateTime.utc_now() |> DateTime.truncate(:second))
-  #   |> Repo.update!()
-  # end
+  def delete_user!(user) do
+    result =
+      from(u in User, select: [:id, :deleted_at], where: u.id == ^user.id and is_nil(u.deleted_at))
+      |> Repo.update_all(set: [deleted_at: DateTime.utc_now() |> DateTime.truncate(:second)])
+
+    case result do
+      {1, [deleted_user]} ->
+        deleted_user
+
+      _ ->
+        user
+    end
+  end
 end

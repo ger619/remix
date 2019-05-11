@@ -3,6 +3,8 @@ defmodule RemitWeb.UserControllerTest do
 
   alias Remit.Accounts
 
+  @moduletag authenticate: %{email: "user@example.com"}
+
   @create_attrs %{
     email: "some email",
     id_number: "some id_number",

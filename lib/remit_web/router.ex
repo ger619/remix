@@ -35,7 +35,7 @@ defmodule RemitWeb.Router do
     pipe_through [:browser, :authenticated]
 
     resources "/profiles", ProfileController, except: [:delete]
-    resources "/users", UserController, except: [:delete]
+    resources "/users", UserController
     get "/dashboard", PageController, :dashboard
     resources "/sessions", SessionController, only: [:delete]
   end

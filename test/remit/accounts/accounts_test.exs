@@ -41,7 +41,7 @@ defmodule Remit.AccountsTest do
     end
 
     test "list_users/0 returns all users" do
-      user = user_fixture()
+      user_fixture()
       assert [user | _] = Accounts.list_users()
     end
 
@@ -56,7 +56,7 @@ defmodule Remit.AccountsTest do
       assert user.id_number == "some id_number"
       assert user.id_type == "some id_type"
       assert user.name == "some name"
-      assert user.password_hash == "some password_hash"
+      assert user.password_hash
       assert user.phone_number == "some phone_number"
     end
 
@@ -71,7 +71,7 @@ defmodule Remit.AccountsTest do
       assert user.id_number == "some updated id_number"
       assert user.id_type == "some updated id_type"
       assert user.name == "some updated name"
-      assert user.password_hash == "some updated password_hash"
+      assert user.password_hash
       assert user.phone_number == "some updated phone_number"
     end
 

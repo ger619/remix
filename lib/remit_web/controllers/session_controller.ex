@@ -38,7 +38,7 @@ defmodule RemitWeb.SessionController do
     |> redirect(to: Routes.page_path(conn, :index))
   end
 
-  defp add_session(conn, user, params) do
+  def add_session(conn, user, params) do
     {:ok, %{id: session_id}} = Sessionhandler.create_session(%{user_id: user.id})
 
     conn
