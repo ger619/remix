@@ -12,30 +12,26 @@
 
 </div>
 
-
-
 <table>
   <thead>
     <tr>
       <th>Name</th>
       <th>Phone number</th>
       <th>Email</th>
-      <th>Id number</th>
-      <th>Id type</th>
-      <th>Password</th>
+      <th>ID number</th>
+      <th>ID type</th>
 
       <th></th>
     </tr>
   </thead>
   <tbody>
-<%= for user <- @users do %>
+  <%= for user <- @users do %>
     <tr>
       <td><%= user.name %></td>
       <td><%= user.phone_number %></td>
       <td><%= user.email %></td>
       <td><%= user.id_number %></td>
       <td><%= user.id_type %></td>
-      <td><%= user.password_hash %></td>
 
       <td>
         <%= link "Show", to: Routes.user_path(@conn, :show, user) %>
@@ -43,7 +39,7 @@
 
       </td>
     </tr>
-<% end %>
+  <% end %>
   </tbody>
 </table>
 

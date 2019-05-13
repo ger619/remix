@@ -36,19 +36,24 @@ defmodule RemitWeb.UserController do
     end
   end
 
+  defp random_pass(25) do
+    :crypto.strong_rand_bytes(25) |> Base.url_encode64() |> binary_part(0, 25)
+  end
+
   def show(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
     render(conn, "show.html", user: user)
   end
 
-  def edit(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
+  def edit(conn, %{"id" => user_id}) do
+    user = Accounts.get_user!(user_id)
     changeset = Accounts.change_user(user)
+
     render(conn, "edit.html", user: user, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "user" => user_params}) do
-    user = Accounts.get_user!(id)
+  def update(conn, %{"id" => user_id, "user" => user_params}) do
+    user = Accounts.get_user!(user_id)
 
     case Accounts.update_user(user, user_params) do
       {:ok, user} ->
@@ -67,7 +72,7 @@ defmodule RemitWeb.UserController do
       |> Accounts.delete_user!()
 
     conn
-    |> put_flash(:info, "User updated successfully.")
+    |> put_flash(:info, "User deleted successfully.")
     |> redirect(to: Routes.user_path(conn, :show, user))
   end
 end
