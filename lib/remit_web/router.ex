@@ -1,5 +1,6 @@
 defmodule RemitWeb.Router do
   use RemitWeb, :router
+  import RemitWeb.Authorize
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -7,9 +8,16 @@ defmodule RemitWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug Phauxth.Authenticate
+    plug Phauxth.Remember, create_session_func: &RemitWeb.Auth.Utils.create_session/1
   end
 
   pipeline :authenticated do
+    plug :user_check
+  end
+
+  pipeline :guest do
+    plug :guest_check
   end
 
   pipeline :api do
@@ -17,9 +25,10 @@ defmodule RemitWeb.Router do
   end
 
   scope "/", RemitWeb do
-    pipe_through :browser
+    pipe_through [:browser, :guest_check]
 
     get "/", PageController, :index
+    resources "/sessions", SessionController, only: [:new, :create]
   end
 
   scope "/", RemitWeb do
@@ -27,10 +36,7 @@ defmodule RemitWeb.Router do
 
     resources "/profiles", ProfileController, except: [:delete]
     resources "/users", UserController
+    get "/dashboard", PageController, :dashboard
+    resources "/sessions", SessionController, only: [:delete]
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", RemitWeb do
-  # pipe_through :api
-  # end
 end
