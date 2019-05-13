@@ -17,8 +17,8 @@ defmodule RemitWeb.PasswordController do
 
       {:ok, _} ->
         conn
-        |> put_flash(:info, "Success")
-        |> redirect(to: Routes.page_path(conn, :index))
+        |> put_flash(:info, "Your password has been updated.")
+        |> redirect(to: Routes.page_path(conn, :dashboard))
     end
   end
 end

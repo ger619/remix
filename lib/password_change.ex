@@ -4,12 +4,13 @@ defmodule Remit.PasswordChange do
   alias Remit.User
 
   embedded_schema do
+    field :current_password
     field :password
     field :password_confirmation
   end
 
   def update_password(%{"current_password" => current_pwd, "password" => new_password}, user) do
-    if Comeonin.Bcrypt.verify_pass(user.password_hash, current_pwd) do
+    if Bcrypt.verify_pass(user.password_hash, current_pwd) do
       new_user = %{
         name: user.name,
         phone_number: user.phone_number,

@@ -36,6 +36,9 @@ defmodule RemitWeb.Router do
 
     get "/dashboard", PageController, :dashboard
 
+    get "/password-change", PasswordController, :index
+    post "/password-change", PasswordController, :create
+
     resources "/profiles", ProfileController, except: [:delete]
     resources "/users", UserController
     resources "/sessions", SessionController, only: [:delete]
