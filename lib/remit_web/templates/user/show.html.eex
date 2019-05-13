@@ -18,18 +18,13 @@
   </li>
 
   <li>
-    <strong>Id number:</strong>
+    <strong>ID number:</strong>
     <%= @user.id_number %>
   </li>
 
   <li>
-    <strong>Id type:</strong>
+    <strong>ID type:</strong>
     <%= @user.id_type %>
-  </li>
-
-  <li>
-    <strong>Password hash:</strong>
-    <%= @user.password_hash %>
   </li>
 
 </ul>

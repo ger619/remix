@@ -1,4 +1,4 @@
-defmodule Api.Account.Transaction do
+defmodule Remit.Account.Transaction do
   use Ecto.Schema
   import Ecto.Changeset
 
