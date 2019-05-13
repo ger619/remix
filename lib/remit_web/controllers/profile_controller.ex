@@ -8,7 +8,7 @@ defmodule RemitWeb.ProfileController do
     page =
       case params["query"] do
         nil ->
-          Profile
+          Profile 
 
         term ->
           Profile.search_query(term)

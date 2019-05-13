@@ -27,6 +27,10 @@
     <%= @user.id_type %>
   </li>
 
+  <li>
+    <strong>Super admin:</strong>
+    <%= @user.super_admin %>
+  </li>
 
 </ul>
 

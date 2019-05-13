@@ -9,10 +9,11 @@ defmodule Remit.User do
     field :email, :string
     field :id_number, :string
     field :id_type, :string
+    field :password_hash, :string
     field :deleted_at, :utc_datetime
     field :super_admin, :boolean, default: false
     field :require_password_change, :boolean, default: false
-    field :password, :string, virtual: true
+    field :password, :string, default: "false"
 
     timestamps()
   end
@@ -20,7 +21,7 @@ defmodule Remit.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :phone_number, :email, :id_number, :id_type, :super_admin])
+    |> cast(attrs, [:name, :phone_number, :email, :id_number, :id_type, :password, :super_admin])
     |> validate_required([
       :name,
       :phone_number,
@@ -42,6 +43,7 @@ defmodule Remit.User do
     end
   end
 
+  @spec search_query(any()) :: Ecto.Query.t()
   def search_query(q) do
     search_query = "%#{q}%"
 

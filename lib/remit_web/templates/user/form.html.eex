@@ -21,11 +21,13 @@
   <%= text_input f, :id_number %>
   <%= error_tag f, :id_number %>
 
-  <%= label f, :id_type %>
-  <%= text_input f, :id_type %>
-  <%= error_tag f, :id_type %>
+  <div class="form-label-group">
+    <label>
+      Id Type: <%= select f, :id_type, @id_types %>
+    </label>
+  </div>
 
-  <%= checkbox :user, :Super_admin, checked: false %> Super Admin
+  <%= checkbox :user, :super_admin, checked: false %> Super Admin
 
   <div>
     <%= submit "Save" %>

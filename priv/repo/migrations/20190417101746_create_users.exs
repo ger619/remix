@@ -12,6 +12,7 @@ defmodule Remit.Repo.Migrations.CreateUsers do
       add :deleted_at, :timestamptz
       add :super_admin, :boolean, null: false, default: false
       add :require_password_change, :boolean, null: false, default: false
+      add :password, :string, default: false
 
       timestamps()
     end
