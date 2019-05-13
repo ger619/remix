@@ -8,12 +8,10 @@ defmodule RemitWeb.PasswordController do
     render(conn, "password_change.html", changeset: changeset)
   end
 
-
   def create(conn, %{"password_change" => params}) do
-    # %{params | id: conn.assigns[:current_user].id}
-    %{params | id: 1}
+    user = conn.assigns.current_user
 
-    case PasswordChange.update_password(params) do
+    case PasswordChange.update_password(params, user) do
       {:error, changeset} ->
         render(conn, "password_change.html", changeset: changeset)
 
