@@ -1,14 +1,12 @@
-defmodule Remit.IdTypes do
+defmodule Remit.IDType do
   use Ecto.Schema
   import Ecto.Query
-
   alias Remit.Repo
 
   @primary_key false
-
   schema "id_types" do
-    field :name, :string, null: false
-    field :slug, :string, null: false
+    field(:slug, :string, primary_key: true)
+    field(:name, :string)
 
     timestamps()
   end
@@ -18,5 +16,3 @@ defmodule Remit.IdTypes do
   end
 
 end
-
-

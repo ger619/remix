@@ -8,6 +8,8 @@ defmodule Remit.Accounts do
   alias Remit.Repo
   alias Remit.User
   alias Remit.Profile
+  alias Remit.Session
+  alias Remit.Sessions.Sessionhandler
 
   @doc """
   Returns the list of users.
@@ -39,6 +41,22 @@ defmodule Remit.Accounts do
   def get_user!(id), do: Repo.get!(User, id)
 
   @doc """
+  Gets a user based on the params.
+
+  This is used by Phauxth to get user information.
+  """
+  def get_by(%{"session_id" => session_id}) do
+    with %Session{user_id: user_id} <- Sessionhandler.get_session(session_id),
+         do: get_user!(user_id)
+  end
+
+  def get_by(%{"phone_number" => phone_number}) do
+    Repo.get_by(User, phone_number: phone_number)
+  end
+
+  def get_by(%{"user_id" => user_id}), do: Repo.get(User, user_id)
+
+  @doc """
   Creates a user.
 
   ## Examples
@@ -50,6 +68,7 @@ defmodule Remit.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
+
   def create_user(user) do
     Repo.transaction(fn ->
       changeset =
@@ -108,9 +127,17 @@ defmodule Remit.Accounts do
     User.changeset(user, %{})
   end
 
-  def delete_user!(%User{} = user) do
-    user
-    |> Ecto.Changeset.change(deleted_at: DateTime.utc_now() |> DateTime.truncate(:second))
-    |> Repo.update!()
+  def delete_user!(user) do
+    result =
+      from(u in User, select: [:id, :deleted_at], where: u.id == ^user.id and is_nil(u.deleted_at))
+      |> Repo.update_all(set: [deleted_at: DateTime.utc_now() |> DateTime.truncate(:second)])
+
+    case result do
+      {1, [deleted_user]} ->
+        deleted_user
+
+      _ ->
+        user
+    end
   end
 end

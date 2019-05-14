@@ -4,7 +4,7 @@ defmodule RemitWeb.UserController do
   alias Remit.Repo
   alias Remit.User
   alias Remit.Accounts
-  alias Remit.IdTypes
+  alias Remit.IDType
 
   def index(conn, params) do
     page =
@@ -22,14 +22,15 @@ defmodule RemitWeb.UserController do
 
   def new(conn, _params) do
     changeset = Accounts.change_user(%User{})
-    id_types =  IdTypes.all() |> Enum.map(fn [a, b] -> ({a, b}) end)
+    id_types =  IDType.all() |> Enum.map(fn [a, b] -> ({a, b}) end)
     render(conn, "new.html", changeset: changeset, id_types: id_types)
 
   end
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"user" => user_params}) do
-    user_params = user_params |> Map.put("password", random_pass(6))
+    
+    Map.merge(user_params, %{"password_hash" => random_pass(6)})
     case Accounts.create_user(user_params) do
       {:ok, user} ->
 
@@ -52,16 +53,17 @@ defmodule RemitWeb.UserController do
     render(conn, "show.html", user: user)
   end
 
-  def edit(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
+  def edit(conn, %{"id" => user_id}) do
+    user = Accounts.get_user!(user_id)
     changeset = Accounts.change_user(user)
-    id_types =  IdTypes.all() |> Enum.map(fn [a, b] -> ({a, b}) end)
+    id_types =  IDType.all() |> Enum.map(fn [a, b] -> ({a, b}) end)
 
     render(conn, "edit.html", user: user, id_types: id_types, changeset: changeset)
+
   end
 
-  def update(conn, %{"id" => id, "user" => user_params}) do
-    user = Accounts.get_user!(id)
+  def update(conn, %{"id" => user_id, "user" => user_params}) do
+    user = Accounts.get_user!(user_id)
 
     case Accounts.update_user(user, user_params) do
       {:ok, user} ->
@@ -71,7 +73,7 @@ defmodule RemitWeb.UserController do
 
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        id_types =  IdTypes.all() |> Enum.map(fn [a, b] -> ({a, b}) end)
+        id_types =  IDType.all() |> Enum.map(fn [a, b] -> ({a, b}) end)
         render(conn, "edit.html", user: user, id_types: id_types, changeset: changeset)
     end
   end
@@ -82,7 +84,7 @@ defmodule RemitWeb.UserController do
       |> Accounts.delete_user!()
 
     conn
-    |> put_flash(:info, "User updated successfully.")
+    |> put_flash(:info, "User deleted successfully.")
     |> redirect(to: Routes.user_path(conn, :show, user))
   end
 end
