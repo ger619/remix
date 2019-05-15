@@ -3,7 +3,7 @@ defmodule RemitWeb.PassWordControllerTest do
 
   @moduletag authenticate: %{
                email: "test@example.com",
-               password_hash: Bcrypt.hash_pwd_salt("admin123")
+               password_hash: Bcrypt.hash_pwd_salt("admin123") |> IO.inspect()
              }
 
   test "GET /password-change", %{conn: conn} do
@@ -21,7 +21,7 @@ defmodule RemitWeb.PassWordControllerTest do
         }
       })
 
-    assert redirect_to(conn) == Routes.page_path(conn, :dashboard)
+    assert redirected_to(conn) == Routes.page_path(conn, :dashboard)
   end
 
   test "POST /password-change when invalid", %{conn: conn} do

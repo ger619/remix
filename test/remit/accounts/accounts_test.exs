@@ -9,7 +9,7 @@ defmodule Remit.AccountsTest do
     @valid_attrs %{
       email: "some email",
       id_number: "some id_number",
-      id_type: "some id_type",
+      id_type: "national_id",
       name: "some name",
       password_hash: "some password_hash",
       phone_number: "some phone_number"
@@ -17,7 +17,7 @@ defmodule Remit.AccountsTest do
     @update_attrs %{
       email: "some updated email",
       id_number: "some updated id_number",
-      id_type: "some updated id_type",
+      id_type: "national_id",
       name: "some updated name",
       password_hash: "some updated password_hash",
       phone_number: "some updated phone_number"
@@ -32,6 +32,18 @@ defmodule Remit.AccountsTest do
     }
 
     def user_fixture(attrs \\ %{}) do
+      now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+      Repo.insert!(
+        %Remit.IDType{
+          slug: @valid_attrs.id_type,
+          name: "National ID",
+          inserted_at: now,
+          updated_at: now
+        },
+        on_conflict: :nothing
+      )
+
       {:ok, user} =
         attrs
         |> Enum.into(@valid_attrs)
@@ -54,7 +66,7 @@ defmodule Remit.AccountsTest do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
       assert user.email == "some email"
       assert user.id_number == "some id_number"
-      assert user.id_type == "some id_type"
+      assert user.id_type == "national_id"
       assert user.name == "some name"
       assert user.password_hash
       assert user.phone_number == "some phone_number"
@@ -69,7 +81,7 @@ defmodule Remit.AccountsTest do
       assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs)
       assert user.email == "some updated email"
       assert user.id_number == "some updated id_number"
-      assert user.id_type == "some updated id_type"
+      assert user.id_type == "national_id"
       assert user.name == "some updated name"
       assert user.password_hash
       assert user.phone_number == "some updated phone_number"
