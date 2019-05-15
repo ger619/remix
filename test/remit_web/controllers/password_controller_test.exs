@@ -28,8 +28,21 @@ defmodule RemitWeb.PassWordControllerTest do
     conn =
       post(conn, Routes.password_path(conn, :create), %{
         "password_change" => %{
-          "current_password" => "wrong",
+          "current_password" => "admin123",
           "password" => "abc456",
+          "password_confirmation" => "abc123"
+        }
+      })
+
+    assert html_response(conn, 200)
+  end
+
+  test "POST /password-change when current password doenst match", %{conn: conn} do
+    conn =
+      post(conn, Routes.password_path(conn, :create), %{
+        "password_change" => %{
+          "current_password" => "wrong",
+          "password" => "abc123",
           "password_confirmation" => "abc123"
         }
       })

@@ -12,29 +12,29 @@ defmodule Remit.PasswordChange do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:password, :current_password])
-    |> validate_required([:password, :current_password])
-    |> validate_confirmation(:password, message: "Password dont match")
+    |> cast(params, [:current_password, :password, :current_password])
+    |> validate_required([:current_password, :password])
+    |> validate_confirmation(:password, message: "Password doesn't match")
   end
 
   def update_password(
-        %{"current_password" => _, "password" => new_password} = params,
+        params,
         user
       ) do
     changes = changeset(%__MODULE__{}, params)
 
-    if changes.valid? do
-      current_pwd = get_change(changes, :current_password)
-
-      if Bcrypt.verify_pass(current_pwd, user.password_hash) do
-        User.changeset(user, %{password_hash: new_password})
-        |> Repo.update()
-      else
+    with {:ok, struct} <- apply_action(changes, :update),
+         true <- Bcrypt.verify_pass(struct.current_password, user.password_hash) do
+      user
+      |> User.changeset(%{password_hash: struct.password})
+      |> Repo.update()
+    else
+      false ->
         changes = add_error(changes, :current_password, "doesnt match existing password")
         {:error, %{changes | action: :update}}
-      end
-    else
-      {:error, changes}
+
+      error ->
+        error
     end
   end
 end
