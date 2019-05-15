@@ -29,7 +29,7 @@ defmodule RemitWeb.UserController do
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"user" => user_params}) do
-    
+
     Map.merge(user_params, %{"password_hash" => random_pass(6)})
     case Accounts.create_user(user_params) do
       {:ok, user} ->
@@ -39,7 +39,8 @@ defmodule RemitWeb.UserController do
         |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        id_types =  IDType.all() |> Enum.map(fn [a, b] -> ({a, b}) end)
+        render(conn, "new.html", changeset: changeset, id_types: id_types)
     end
   end
 
