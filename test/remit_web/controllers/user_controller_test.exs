@@ -1,6 +1,9 @@
 defmodule RemitWeb.UserControllerTest do
   use RemitWeb.ConnCase
 
+  import Mox
+
+  alias Remit.Repo
   alias Remit.Accounts
 
   @moduletag authenticate: %{email: "user@example.com"}
@@ -8,7 +11,7 @@ defmodule RemitWeb.UserControllerTest do
   @create_attrs %{
     email: "some email",
     id_number: "some id_number",
-    id_type: "some id_type",
+    id_type: "national_id",
     is_admin: "some is_admin",
     name: "some name",
     password_hash: "some password_hash",
@@ -17,7 +20,7 @@ defmodule RemitWeb.UserControllerTest do
   @update_attrs %{
     email: "some updated email",
     id_number: "some updated id_number",
-    id_type: "some updated id_type",
+    id_type: "national_id",
     is_admin: "some updated is_admin",
     name: "some updated name",
     password_hash: "some updated password_hash",
@@ -34,6 +37,18 @@ defmodule RemitWeb.UserControllerTest do
   }
 
   def fixture(:user) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    Repo.insert!(
+      %Remit.IDType{
+        slug: @create_attrs.id_type,
+        name: "National ID",
+        inserted_at: now,
+        updated_at: now
+      },
+      on_conflict: :nothing
+    )
+
     {:ok, user} = Accounts.create_user(@create_attrs)
     user
   end
@@ -53,7 +68,12 @@ defmodule RemitWeb.UserControllerTest do
   end
 
   describe "create user" do
+    setup :verify_on_exit!
+
     test "redirects to show when data is valid", %{conn: conn} do
+      Remit.SMSMock
+      |> expect(:deliver, fn _msisdn, _message, _config -> {:ok, :sent} end)
+
       conn = post(conn, Routes.user_path(conn, :create), user: @create_attrs)
 
       assert %{id: id} = redirected_params(conn)

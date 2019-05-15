@@ -1,34 +1,40 @@
 defmodule Remit.PasswordChange do
   use Ecto.Schema
-  import Ecto.Changeset
   alias Remit.Repo
+  alias Remit.User
+  import Ecto.Changeset
 
   embedded_schema do
+    field :current_password
     field :password
     field :password_confirmation
   end
 
-  def changeset(struct, attrs) do
+  def changeset(struct, params \\ %{}) do
     struct
-    |> cast(attrs, [:password])
-    |> validate_required([:password |> encrypt_password()])
-    |> validate_confirmation(:password, message: "does not match password")
+    |> cast(params, [:current_password, :password, :current_password])
+    |> validate_required([:current_password, :password])
+    |> validate_confirmation(:password, message: "Password doesn't match")
   end
 
-  def update_password(attrs) do
-    %__MODULE__{}
-    |> changeset(attrs)
+  def update_password(
+        params,
+        user
+      ) do
+    changes = changeset(%__MODULE__{}, params)
 
-    # |> Repo.update()
-  end
+    with {:ok, struct} <- apply_action(changes, :update),
+         true <- Bcrypt.verify_pass(struct.current_password, user.password_hash) do
+      user
+      |> User.changeset(%{password_hash: struct.password})
+      |> Repo.update()
+    else
+      false ->
+        changes = add_error(changes, :current_password, "doesnt match existing password")
+        {:error, %{changes | action: :update}}
 
-  defp encrypt_password(changeset) do
-    case changeset do
-      %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
-        put_change(changeset, :encrypted_password, Comeonin.Bcrypt.hashpwsalt(password))
-
-      _ ->
-        changeset
+      error ->
+        error
     end
   end
 end

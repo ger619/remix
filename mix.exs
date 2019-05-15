@@ -20,7 +20,7 @@ defmodule Remit.MixProject do
   def application do
     [
       mod: {Remit.Application, []},
-      extra_applications: [:logger, :runtime_tools, :comeonin, :scrivener_ecto, :scrivener_html]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -54,7 +54,8 @@ defmodule Remit.MixProject do
       {:telemetry, "~> 0.4.0"},
       {:mime, "~> 1.3"},
       {:plug_crypto, "~> 1.0"},
-      {:comeonin, "~> 5.1"}
+      {:comeonin, "~> 5.1"},
+      {:mox, "~> 0.5", only: :test}
     ]
   end
 
