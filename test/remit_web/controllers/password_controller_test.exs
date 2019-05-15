@@ -3,7 +3,7 @@ defmodule RemitWeb.PassWordControllerTest do
 
   @moduletag authenticate: %{
                email: "test@example.com",
-               password_hash: Bcrypt.hash_pwd_salt("admin123") |> IO.inspect()
+               password_hash: Bcrypt.hash_pwd_salt("admin123")
              }
 
   test "GET /password-change", %{conn: conn} do
