@@ -36,8 +36,12 @@ defmodule RemitWeb.UserController do
     end
   end
 
-  def show(conn, %{"id" => user_id}) do
-    user = Accounts.get_user!(user_id)
+  defp random_pass(25) do
+    :crypto.strong_rand_bytes(25) |> Base.url_encode64() |> binary_part(0, 25)
+  end
+
+  def show(conn, %{"id" => id}) do
+    user = Accounts.get_user!(id)
     render(conn, "show.html", user: user)
   end
 

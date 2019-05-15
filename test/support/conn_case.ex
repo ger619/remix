@@ -70,6 +70,13 @@ defmodule RemitWeb.ConnCase do
         params
       )
 
+    # upsert id_type
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    Repo.insert!(
+      %Remit.IDType{slug: params.id_type, name: "National ID", inserted_at: now, updated_at: now},
+      on_conflict: :nothing
+    )
+
     user =
       Ecto.Changeset.change(%User{}, params)
       |> Repo.insert!()

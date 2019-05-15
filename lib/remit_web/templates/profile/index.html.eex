@@ -1,11 +1,15 @@
 <h1>Listing Profiles</h1>
-<div class="col-md-8">
-    <%= form_for @conn, Routes.profile_path(@conn, :index), [method: :get, class: "pull-right"], fn f -> %>
-    <%= search_input f, :query %><%= submit "Search" %>
-    <% end %>
+<div class="row">
+    <div class="col-md-8">
+        <%= form_for @conn, Routes.profile_path(@conn, :index), [method: :get, class: "pull-right"], fn f -> %>
+        <%= search_input f, :query %><%= submit "Search" %>
+        <% end %>
+    </div>
 
-  </div>
-
+    <div class="col-md-4">
+        <span><%= link "New Profile", to: Routes.profile_path(@conn, :new)%></span>
+    </div>
+</div>
 
 <table class="table">
     <thead>
@@ -31,7 +35,6 @@
     </tbody>
 </table>
 
-<span><%= link "New Profile", to: Routes.profile_path(@conn, :new)%></span>
 
 
 
