@@ -45,7 +45,7 @@ defmodule Remit.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:slugger, "~> 0.3 "},
       {:scrivener, "~> 2.7"},
-      {:scrivener_ecto, "~> 2.2"},s
+      {:scrivener_ecto, "~> 2.2"},
       {:scrivener_html, "~> 1.8"},
       {:phauxth, "~> 2.2"},
       {:bcrypt_elixir, "~> 2.0"},
