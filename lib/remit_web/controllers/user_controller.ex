@@ -22,30 +22,28 @@ defmodule RemitWeb.UserController do
 
   def new(conn, _params) do
     changeset = Accounts.change_user(%User{})
-    id_types =  IDType.all() |> Enum.map(fn [a, b] -> ({a, b}) end)
+    id_types = IDType.all() |> Enum.map(fn [a, b] -> {a, b} end)
     render(conn, "new.html", changeset: changeset, id_types: id_types)
-
   end
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"user" => user_params}) do
-
     Map.merge(user_params, %{"password_hash" => random_pass(6)})
+
     case Accounts.create_user(user_params) do
       {:ok, user} ->
-
         conn
         |> put_flash(:info, "User created successfully.")
         |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        id_types =  IDType.all() |> Enum.map(fn [a, b] -> ({a, b}) end)
+        id_types = IDType.all() |> Enum.map(fn [a, b] -> {a, b} end)
         render(conn, "new.html", changeset: changeset, id_types: id_types)
     end
   end
 
   defp random_pass(length) do
-     :crypto.strong_rand_bytes(length) |> Base.url_encode64() |> binary_part(0,length)
+    :crypto.strong_rand_bytes(length) |> Base.url_encode64() |> binary_part(0, length)
   end
 
   @spec show(Plug.Conn.t(), map()) :: Plug.Conn.t()
@@ -57,10 +55,9 @@ defmodule RemitWeb.UserController do
   def edit(conn, %{"id" => user_id}) do
     user = Accounts.get_user!(user_id)
     changeset = Accounts.change_user(user)
-    id_types =  IDType.all() |> Enum.map(fn [a, b] -> ({a, b}) end)
+    id_types = IDType.all() |> Enum.map(fn [a, b] -> {a, b} end)
 
     render(conn, "edit.html", user: user, id_types: id_types, changeset: changeset)
-
   end
 
   def update(conn, %{"id" => user_id, "user" => user_params}) do
@@ -72,9 +69,8 @@ defmodule RemitWeb.UserController do
         |> put_flash(:info, "User updated successfully.")
         |> redirect(to: Routes.user_path(conn, :show, user))
 
-
       {:error, %Ecto.Changeset{} = changeset} ->
-        id_types =  IDType.all() |> Enum.map(fn [a, b] -> ({a, b}) end)
+        id_types = IDType.all() |> Enum.map(fn [a, b] -> {a, b} end)
         render(conn, "edit.html", user: user, id_types: id_types, changeset: changeset)
     end
   end
