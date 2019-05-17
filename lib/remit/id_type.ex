@@ -1,5 +1,6 @@
 defmodule Remit.IDType do
   use Ecto.Schema
+  alias Remit.Repo
 
   @primary_key false
   schema "id_types" do
@@ -8,4 +9,9 @@ defmodule Remit.IDType do
 
     timestamps()
   end
+
+  def all do
+    Repo.all(__MODULE__)
+  end
+
 end

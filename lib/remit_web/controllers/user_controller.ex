@@ -4,6 +4,7 @@ defmodule RemitWeb.UserController do
   alias Remit.Repo
   alias Remit.User
   alias Remit.Accounts
+  alias Remit.IDType
 
   def index(conn, params) do
     page =
@@ -21,10 +22,14 @@ defmodule RemitWeb.UserController do
 
   def new(conn, _params) do
     changeset = Accounts.change_user(%User{})
-    render(conn, "new.html", changeset: changeset)
+    id_types =  IDType.all()
+    render(conn, "new.html", changeset: changeset, id_types: id_types)
   end
 
+  @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"user" => user_params}) do
+    Map.merge(user_params, %{"password_hash" => random_pass(6)})
+
     case Accounts.create_user(user_params) do
       {:ok, user} ->
         conn
@@ -32,14 +37,16 @@ defmodule RemitWeb.UserController do
         |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        id_types =  IDType.all()
+        render(conn, "new.html", changeset: changeset, id_types: id_types)
     end
   end
 
-  defp random_pass(25) do
-    :crypto.strong_rand_bytes(25) |> Base.url_encode64() |> binary_part(0, 25)
+  defp random_pass(length) do
+    :crypto.strong_rand_bytes(length) |> Base.url_encode64() |> binary_part(0, length)
   end
 
+  @spec show(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
     render(conn, "show.html", user: user)
@@ -48,8 +55,8 @@ defmodule RemitWeb.UserController do
   def edit(conn, %{"id" => user_id}) do
     user = Accounts.get_user!(user_id)
     changeset = Accounts.change_user(user)
-
-    render(conn, "edit.html", user: user, changeset: changeset)
+    id_types =  IDType.all()
+    render(conn, "edit.html", user: user, id_types: id_types, changeset: changeset)
   end
 
   def update(conn, %{"id" => user_id, "user" => user_params}) do
@@ -62,7 +69,8 @@ defmodule RemitWeb.UserController do
         |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", user: user, changeset: changeset)
+        id_types =  IDType.all()
+        render(conn, "edit.html", user: user, id_types: id_types, changeset: changeset)
     end
   end
 

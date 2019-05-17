@@ -58,7 +58,7 @@ defmodule Remit.Profile do
           profile
 
         {:error, changeset} ->
-          Repo.rollback(changeset)
+          Repo.rollback(changeset) 
       end
     end)
   end

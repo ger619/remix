@@ -11,9 +11,12 @@
 # and so on) as they will fail if something goes wrong.
 
 alias Remit.Repo
+alias Remit.IDType
+
 alias Remit.User
 
 Repo.delete_all(User)
+Repo.delete_all(IDType)
 
 entries =
   [%{slug: "national_id", name: "National ID"}]
@@ -25,6 +28,28 @@ entries =
 
 {1, _} = Repo.insert_all(Remit.IDType, entries)
 
+entries =
+  [%{slug: "passport", name: "PassPort"}]
+  |> Enum.map(fn id_type ->
+    id_type
+    |> Map.put(:inserted_at, NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second))
+    |> Map.put(:updated_at, NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second))
+  end)
+
+{1, _} = Repo.insert_all(Remit.IDType, entries)
+
+
+entries =
+  [%{slug: "resident_id", name: "Resident ID"}]
+  |> Enum.map(fn id_type ->
+    id_type
+    |> Map.put(:inserted_at, NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second))
+    |> Map.put(:updated_at, NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second))
+  end)
+
+{1, _} = Repo.insert_all(Remit.IDType, entries)
+
+
 Repo.insert!(
   Ecto.Changeset.change(%User{}, %{
     name: "Admin",
@@ -35,6 +60,7 @@ Repo.insert!(
     password_hash: Bcrypt.hash_pwd_salt("admin123")
   })
 )
+
 
 Repo.insert!(
   Ecto.Changeset.change(%User{}, %{

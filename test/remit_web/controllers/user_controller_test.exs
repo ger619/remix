@@ -5,6 +5,7 @@ defmodule RemitWeb.UserControllerTest do
 
   alias Remit.Repo
   alias Remit.Accounts
+  alias Remit.IDType
 
   @moduletag authenticate: %{email: "user@example.com"}
 
@@ -84,6 +85,7 @@ defmodule RemitWeb.UserControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
+      IDType.all()
       conn = post(conn, Routes.user_path(conn, :create), user: @invalid_attrs)
       assert html_response(conn, 200) =~ "New User"
     end
