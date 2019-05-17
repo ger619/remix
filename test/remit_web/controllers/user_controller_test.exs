@@ -73,7 +73,10 @@ defmodule RemitWeb.UserControllerTest do
 
     test "redirects to show when data is valid", %{conn: conn} do
       Remit.SMSMock
-      |> expect(:deliver, fn _msisdn, _message, _config -> {:ok, :sent} end)
+      |> expect(:deliver, fn phone_number, _message, _config ->
+        {:ok, :sent}
+        assert phone_number == @create_attrs.phone_number
+      end)
 
       conn = post(conn, Routes.user_path(conn, :create), user: @create_attrs)
 
