@@ -37,13 +37,6 @@ defmodule Remit.User do
     |> password_hash()
   end
 
-  #  If you are using Bcrypt or Pbkdf2, change Argon2 to Bcrypt or Pbkdf2
-  # defp password_hash(
-  #        %Ecto.Changeset{valid?: true, changes: %{password_hash: password}} = changeset
-  #      ) do
-  #   put_change(changeset, :password_hash, Bcrypt.hash_pwd_salt(password))
-  # end
-
   defp password_hash(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: password}} ->

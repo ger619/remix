@@ -1,6 +1,5 @@
 defmodule Remit.IDType do
   use Ecto.Schema
-  import Ecto.Query
   alias Remit.Repo
 
   @primary_key false
@@ -12,7 +11,7 @@ defmodule Remit.IDType do
   end
 
   def all do
-    Repo.all(from i in __MODULE__, select: [i.name, i.slug])
+    Repo.all(__MODULE__)
   end
 
 end

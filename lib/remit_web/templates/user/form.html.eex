@@ -23,7 +23,7 @@
 
   <div class="form-label-group">
     <label>
-      Id Type: <%= select f, :id_type, @id_types %>
+      Id Type: <%= select f, :id_type, id_type_for_select(@id_types) %>
     </label>
   </div>
 
