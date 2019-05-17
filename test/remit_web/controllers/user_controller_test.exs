@@ -85,7 +85,7 @@ defmodule RemitWeb.UserControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      id_types =  IDType.all() |> Enum.map(fn [a, b] -> ({a, b}) end)
+      IDType.all()
       conn = post(conn, Routes.user_path(conn, :create), user: @invalid_attrs)
       assert html_response(conn, 200) =~ "New User"
     end

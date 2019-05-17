@@ -19,6 +19,7 @@ defmodule Remit.User do
 
     timestamps()
   end
+
   Accounts
   @doc false
   def changeset(user, attrs) do
@@ -37,13 +38,14 @@ defmodule Remit.User do
     |> password_hash()
   end
 
+  defp password_hash(
+         %Ecto.Changeset{valid?: true, changes: %{password_hash: password}} = changeset
+       ) do
+    put_change(changeset, :password_hash, Bcrypt.hash_pwd_salt(password))
+  end
+
   defp password_hash(changeset) do
-    case changeset do
-      %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
-        put_change(changeset, :password_hash, Comeonin.Bcrypt.hashpwsalt(password))
-        _ ->
-          changeset
-    end
+    changeset
   end
 
   def search_query(q) do
