@@ -1,9 +1,11 @@
 defmodule RemitWeb.UserControllerTest do
   use RemitWeb.ConnCase
 
+  import Mox
+
   alias Remit.Repo
   alias Remit.Accounts
-  import Ecto.Changeset
+  alias Remit.IDType
 
   @moduletag authenticate: %{email: "user@example.com"}
 
@@ -67,7 +69,15 @@ defmodule RemitWeb.UserControllerTest do
   end
 
   describe "create user" do
+    setup :verify_on_exit!
+
     test "redirects to show when data is valid", %{conn: conn} do
+      Remit.SMSMock
+      |> expect(:deliver, fn phone_number, _message, _config ->
+        {:ok, :sent}
+        assert phone_number == @create_attrs.phone_number
+      end)
+
       conn = post(conn, Routes.user_path(conn, :create), user: @create_attrs)
 
       assert %{id: id} = redirected_params(conn)
@@ -122,28 +132,31 @@ defmodule RemitWeb.UserControllerTest do
     end
   end
 
+  describe "reset password when require_password_change is true" do
+    setup [:create_user]
+
+    test "POST /users/:id/reset", %{conn: conn, user: user} do
+      conn = post(conn, Routes.user_path(conn, :reset_action, user))
+      assert redirected_to(conn) == Routes.user_path(conn, :show, user)
+      assert get_flash(conn, :info)
+      assert %{require_password_change: true} = Accounts.get_user!(user.id)
+    end
+  end
+
+  describe "reset password when require_password_change is false" do
+    setup [:create_user]
+
+    test "POST /users/:id/reset", %{conn: conn, user: user} do
+      user |> Ecto.Changeset.change(require_password_change: false) |> Repo.update!()
+      conn = post(conn, Routes.user_path(conn, :reset_action, user))
+      assert redirected_to(conn) == Routes.user_path(conn, :show, user)
+      assert get_flash(conn, :error)
+      assert %{require_password_change: false} = Accounts.get_user!(user.id)
+    end
+  end
+
   defp create_user(_) do
     user = fixture(:user)
     {:ok, user: user}
-  end
-
-  describe "reset password" do
-    setup [:create_user]
-
-    test "reset password", %{conn: conn, user: user} do
-      conn = post(conn, Routes.user_path(conn, :reset_action, user))
-      assert redirected_to(conn) == Routes.user_path(conn, :show, user)
-      assert get_flash(:info)
-    end
-  end
-
-  describe "false password" do
-    setup [:create_user]
-
-    test "false password", %{conn: conn, user: user} do
-      conn = post(conn, Routes.user_path(conn, :reset_action, user))
-      assert redirected_to(conn) == Routes.user_path(conn, :show, user)
-      assert get_flash(:error)
-    end
   end
 end

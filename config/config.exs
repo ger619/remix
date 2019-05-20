@@ -17,6 +17,8 @@ config :remit, RemitWeb.Endpoint,
   render_errors: [view: RemitWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Remit.PubSub, adapter: Phoenix.PubSub.PG2]
 
+config :remit, Remit.SMS, adapter: Remit.SMSLogAdapater
+
 config :scrivener_html,
   routes_helper: RemitWeb.Router.Helpers
 
