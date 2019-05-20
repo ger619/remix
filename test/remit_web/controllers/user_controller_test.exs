@@ -1,9 +1,11 @@
 defmodule RemitWeb.UserControllerTest do
   use RemitWeb.ConnCase
 
+  import Mox
+
   alias Remit.Repo
   alias Remit.Accounts
-  import Ecto.Changeset
+  alias Remit.IDType
 
   @moduletag authenticate: %{email: "user@example.com"}
 
@@ -67,7 +69,15 @@ defmodule RemitWeb.UserControllerTest do
   end
 
   describe "create user" do
+    setup :verify_on_exit!
+
     test "redirects to show when data is valid", %{conn: conn} do
+      Remit.SMSMock
+      |> expect(:deliver, fn phone_number, _message, _config ->
+        {:ok, :sent}
+        assert phone_number == @create_attrs.phone_number
+      end)
+
       conn = post(conn, Routes.user_path(conn, :create), user: @create_attrs)
 
       assert %{id: id} = redirected_params(conn)

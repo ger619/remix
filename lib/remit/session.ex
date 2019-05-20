@@ -7,6 +7,7 @@ defmodule Remit.Session do
   schema "sessions" do
     field :expires_at, :utc_datetime
     belongs_to(:user, User)
+    
     timestamps()
   end
 
@@ -31,3 +32,5 @@ defmodule Remit.Session do
     |> DateTime.from_naive("Etc/UTC")
   end
 end
+
+

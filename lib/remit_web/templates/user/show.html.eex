@@ -27,6 +27,11 @@
     <%= @user.id_type %>
   </li>
 
+  <li>
+    <strong>Super admin:</strong>
+    <%= @user.super_admin %>
+  </li>
+
 </ul>
 
 <span><%= link "Edit", to: Routes.user_path(@conn, :edit, @user) %></span>

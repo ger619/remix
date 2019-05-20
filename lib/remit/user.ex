@@ -21,6 +21,7 @@ defmodule Remit.User do
     timestamps()
   end
 
+  Accounts
   @doc false
   def changeset(user, attrs) do
     user
@@ -35,17 +36,18 @@ defmodule Remit.User do
     ])
     |> validate_required([:name, :phone_number, :email, :id_number, :id_type])
     |> unique_constraint(:phone_number)
-    |> hash_password()
+    |> password_hash()
   end
 
-  # If you are using Bcrypt or Pbkdf2, change Argon2 to Bcrypt or Pbkdf2
-  defp hash_password(
+  defp password_hash(
          %Ecto.Changeset{valid?: true, changes: %{password_hash: password}} = changeset
        ) do
     put_change(changeset, :password_hash, Bcrypt.hash_pwd_salt(password))
   end
 
-  defp hash_password(changeset), do: changeset
+  defp password_hash(changeset) do
+    changeset
+  end
 
   def search_query(q) do
     search_query = "%#{q}%"

@@ -21,9 +21,11 @@
   <%= text_input f, :id_number %>
   <%= error_tag f, :id_number %>
 
-  <%= label f, :id_type %>
-  <%= text_input f, :id_type %>
-  <%= error_tag f, :id_type %>
+  <div class="form-label-group">
+    <label>
+      Id Type: <%= select f, :id_type, id_type_for_select(@id_types) %>
+    </label>
+  </div>
 
   <%= checkbox :user, :super_admin, checked: false %> Super Admin
 
