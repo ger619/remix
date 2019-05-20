@@ -75,7 +75,7 @@ defmodule RemitWeb.UserControllerTest do
       Remit.SMSMock
       |> expect(:deliver, fn phone_number, message, _config ->
         assert phone_number == @create_attrs.phone_number
-        assert message =~ "some password_hash"
+        assert message =~ "Your new password is"
         {:ok, nil}
       end)
 
@@ -90,7 +90,6 @@ defmodule RemitWeb.UserControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      IDType.all()
       conn = post(conn, Routes.user_path(conn, :create), user: @invalid_attrs)
       assert html_response(conn, 200) =~ "New User"
     end
