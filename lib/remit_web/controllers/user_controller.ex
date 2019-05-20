@@ -29,11 +29,15 @@ defmodule RemitWeb.UserController do
 
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"user" => user_params}) do
-    Map.merge(user_params, %{"password_hash" => random_pass(6)})
+    password = random_pass(6)
+    Map.merge(user_params, %{"password_hash" => password})
 
     case Accounts.create_user(user_params) do
       {:ok, user} ->
-        SMS.deliver(user.phone_number, user.password_hash)
+        SMS.deliver(
+          user.phone_number,
+          "Your new password is #{password} logon to http://… to change it"
+        )
 
         conn
         |> put_flash(:info, "User created successfully.")
