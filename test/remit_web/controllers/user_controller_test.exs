@@ -73,22 +73,23 @@ defmodule RemitWeb.UserControllerTest do
 
     test "redirects to show when data is valid", %{conn: conn} do
       Remit.SMSMock
-      |> expect(:deliver, fn phone_number, _message, _config ->
-        {:ok, :sent}
+      |> expect(:deliver, fn phone_number, message, _config ->
         assert phone_number == @create_attrs.phone_number
+        assert message =~ "Your new password is"
+        {:ok, nil}
       end)
 
       conn = post(conn, Routes.user_path(conn, :create), user: @create_attrs)
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == Routes.user_path(conn, :show, id)
+      assert get_flash(conn, :info) =~ "created"
 
       conn = get(conn, Routes.user_path(conn, :show, id))
       assert html_response(conn, 200) =~ "Show User"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      IDType.all()
       conn = post(conn, Routes.user_path(conn, :create), user: @invalid_attrs)
       assert html_response(conn, 200) =~ "New User"
     end

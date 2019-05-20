@@ -19,4 +19,6 @@ config :remit, Remit.Repo,
 
 config :bcrypt_elixir, log_rounds: 4
 
+config :remit, Remit.SMS, adapter: Remit.SMSMock
+
 import_config "dev.local.exs"
