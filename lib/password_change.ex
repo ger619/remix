@@ -37,4 +37,7 @@ defmodule Remit.PasswordChange do
         error
     end
   end
+
+  def random_pass() do
+  end
 end

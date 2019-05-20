@@ -41,6 +41,7 @@ defmodule RemitWeb.Router do
 
     resources "/profiles", ProfileController, except: [:delete]
     resources "/users", UserController
+    post "/user/:id/reset", UserController, :reset_action
     resources "/sessions", SessionController, only: [:delete]
   end
 end

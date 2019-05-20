@@ -5,6 +5,7 @@ defmodule RemitWeb.UserController do
   alias Remit.User
   alias Remit.Accounts
 
+
   def index(conn, params) do
     page =
       case params["query"] do
@@ -74,5 +75,23 @@ defmodule RemitWeb.UserController do
     conn
     |> put_flash(:info, "User deleted successfully.")
     |> redirect(to: Routes.user_path(conn, :show, user))
+  end
+
+  def reset_action(conn, %{"id" => user_id}) do
+    user = Account.get_user!(user_id)
+    pass = random_pass(25)
+
+
+    case User.set_require_password_change(user, pass) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "Your password has been reset")
+        |> redirect(to: Routes.user_path(conn, :show, user))
+
+      {:error, _} ->
+        conn
+        |> put_flash(:info, "Password has been resent")
+        |> redirect(to: Routes.user_path(conn, :show, user))
+    end
   end
 end

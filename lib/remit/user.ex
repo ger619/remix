@@ -2,6 +2,7 @@ defmodule Remit.User do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
+  alias Remit.Repo
 
   alias Remit.Session
 
@@ -52,5 +53,11 @@ defmodule Remit.User do
     from x in __MODULE__,
       where: ilike(x.name, ^search_query),
       or_where: ilike(x.id_number, ^search_query)
+  end
+
+  def set_require_password_change(user, new_password) do
+    user
+    |> changeset(%{require_password_change: true, password_hash: new_password})
+    |> Repo.update()
   end
 end

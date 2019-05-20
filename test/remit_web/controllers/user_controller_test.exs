@@ -3,6 +3,7 @@ defmodule RemitWeb.UserControllerTest do
 
   alias Remit.Repo
   alias Remit.Accounts
+  import Ecto.Changeset
 
   @moduletag authenticate: %{email: "user@example.com"}
 
@@ -124,5 +125,25 @@ defmodule RemitWeb.UserControllerTest do
   defp create_user(_) do
     user = fixture(:user)
     {:ok, user: user}
+  end
+
+  describe "reset password" do
+    setup [:create_user]
+
+    test "reset password", %{conn: conn, user: user} do
+      conn = post(conn, Routes.user_path(conn, :reset_action, user))
+      assert redirected_to(conn) == Routes.user_path(conn, :show, user)
+      assert get_flash(:info)
+    end
+  end
+
+  describe "false password" do
+    setup [:create_user]
+
+    test "false password", %{conn: conn, user: user} do
+      conn = post(conn, Routes.user_path(conn, :reset_action, user))
+      assert redirected_to(conn) == Routes.user_path(conn, :show, user)
+      assert get_flash(:error)
+    end
   end
 end
