@@ -5,6 +5,7 @@ defmodule RemitWeb.UserController do
   alias Remit.User
   alias Remit.Accounts
   alias Remit.IDType
+  alias Remit.SMS
 
   def index(conn, params) do
     page =
@@ -22,7 +23,7 @@ defmodule RemitWeb.UserController do
 
   def new(conn, _params) do
     changeset = Accounts.change_user(%User{})
-    id_types =  IDType.all()
+    id_types = IDType.all()
     render(conn, "new.html", changeset: changeset, id_types: id_types)
   end
 
@@ -32,12 +33,14 @@ defmodule RemitWeb.UserController do
 
     case Accounts.create_user(user_params) do
       {:ok, user} ->
+        SMS.deliver(user.phone_number, user.password_hash)
+
         conn
         |> put_flash(:info, "User created successfully.")
         |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        id_types =  IDType.all()
+        id_types = IDType.all()
         render(conn, "new.html", changeset: changeset, id_types: id_types)
     end
   end
@@ -55,7 +58,7 @@ defmodule RemitWeb.UserController do
   def edit(conn, %{"id" => user_id}) do
     user = Accounts.get_user!(user_id)
     changeset = Accounts.change_user(user)
-    id_types =  IDType.all()
+    id_types = IDType.all()
     render(conn, "edit.html", user: user, id_types: id_types, changeset: changeset)
   end
 
@@ -69,7 +72,7 @@ defmodule RemitWeb.UserController do
         |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        id_types =  IDType.all()
+        id_types = IDType.all()
         render(conn, "edit.html", user: user, id_types: id_types, changeset: changeset)
     end
   end
