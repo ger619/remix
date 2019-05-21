@@ -73,15 +73,17 @@ defmodule RemitWeb.UserControllerTest do
 
     test "redirects to show when data is valid", %{conn: conn} do
       Remit.SMSMock
-      |> expect(:deliver, fn phone_number, _message, _config ->
-        {:ok, :sent}
+      |> expect(:deliver, fn phone_number, message, _config ->
         assert phone_number == @create_attrs.phone_number
+        assert message =~ "Your new password is"
+        {:ok, nil}
       end)
 
       conn = post(conn, Routes.user_path(conn, :create), user: @create_attrs)
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == Routes.user_path(conn, :show, id)
+      assert get_flash(conn, :info) =~ "created"
 
       conn = get(conn, Routes.user_path(conn, :show, id))
       assert html_response(conn, 200) =~ "Show User"
@@ -132,21 +134,17 @@ defmodule RemitWeb.UserControllerTest do
     end
   end
 
-  describe "reset password when require_password_change is true" do
+  describe "reset password" do
     setup [:create_user]
 
-    test "POST /users/:id/reset", %{conn: conn, user: user} do
+    test "POST /users/:id/reset when require_password_change is true", %{conn: conn, user: user} do
       conn = post(conn, Routes.user_path(conn, :reset_action, user))
       assert redirected_to(conn) == Routes.user_path(conn, :show, user)
       assert get_flash(conn, :info)
       assert %{require_password_change: true} = Accounts.get_user!(user.id)
     end
-  end
 
-  describe "reset password when require_password_change is false" do
-    setup [:create_user]
-
-    test "POST /users/:id/reset", %{conn: conn, user: user} do
+    test "POST /users/:id/reset when require_password_change is false", %{conn: conn, user: user} do
       user |> Ecto.Changeset.change(require_password_change: false) |> Repo.update!()
       conn = post(conn, Routes.user_path(conn, :reset_action, user))
       assert redirected_to(conn) == Routes.user_path(conn, :show, user)
