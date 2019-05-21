@@ -28,7 +28,7 @@ defmodule Remit.User do
       :name,
       :phone_number,
       :email,
-      :id_number,
+      :id_number, 
       :id_type,
       :super_admin,
       :password_hash

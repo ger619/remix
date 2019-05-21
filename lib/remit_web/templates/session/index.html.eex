@@ -19,7 +19,7 @@
   <%= label f, :remember_me %>
   &emsp;&emsp;
   <div>
-    <%= submit "Login" %>
+    <%= submit "Login"%>
   </div>
 <% end %>
 

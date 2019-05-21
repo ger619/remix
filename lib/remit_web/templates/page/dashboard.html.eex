@@ -1,0 +1,7 @@
+<div class="col-md-8">
+        <%= form_for @conn, Routes.profile_path(@conn, :new_business_profile), [method: :get, class: "pull-right"], fn -> %>
+            <div class="form-group">
+                <%= submit "Create Business Profile", class: "btn btn-primary" %>
+            </div>
+        <% end %>
+</div>

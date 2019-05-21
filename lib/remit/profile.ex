@@ -2,12 +2,13 @@ defmodule Remit.Profile do
   use Ecto.Schema
 
   import Ecto.Changeset
-  import Ecto.Query
+  import Ecto.Query, only: [from: 2]
 
   alias Remit.Repo
   alias Remit.User
 
   alias Remit.Account.Account
+  alias Remit.UserProfiles
 
   schema "profiles" do
     field :name, :string
@@ -19,11 +20,12 @@ defmodule Remit.Profile do
     timestamps()
   end
 
+
   @doc false
   def changeset(profile, attrs \\ %{}) do
     profile
-    |> cast(attrs, [:name, :type, :currency])
-    |> validate_required([:name, :type, :currency])
+    |> cast(attrs, [:name, :type, :currency, :user_id])
+    |> validate_required([:name, :type, :currency, :user_id])
     |> process_slug
     |> unique_constraint(:name, name: "profiles_slug_index")
   end
@@ -36,6 +38,32 @@ defmodule Remit.Profile do
     else
       changeset
     end
+  end
+
+
+  def create_with_user(user, form_params)  do
+
+    changeset = %__MODULE__{}
+    changeset(%{ form_params | user_id: user.id})
+
+
+    Repo.transaction(fn ->
+      case Repo.insert(changeset) do
+        {:ok, profile} ->
+
+          # insert record into user profiles
+           case UserProfiles.create(%{"profile_id" => profile.id, "user_id" => profile.user_id}) do
+            {:ok, userprofiles} ->
+              userprofiles
+
+            {:eror, userprofiles} ->
+              Repo.rollback(userprofiles)
+           end
+
+        {:error, changeset} ->
+          Repo.rollback(changeset)
+      end
+    end)
   end
 
   def search_query(q) do
@@ -58,7 +86,7 @@ defmodule Remit.Profile do
           profile
 
         {:error, changeset} ->
-          Repo.rollback(changeset) 
+          Repo.rollback(changeset)
       end
     end)
   end

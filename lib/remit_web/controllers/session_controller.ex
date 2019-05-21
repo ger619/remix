@@ -37,7 +37,7 @@ defmodule RemitWeb.SessionController do
     |> put_flash(:info, "User successfully logged out.")
     |> redirect(to: Routes.page_path(conn, :index))
   end
-
+      
   def add_session(conn, user, params) do
     {:ok, %{id: session_id}} = Sessionhandler.create_session(%{user_id: user.id})
 
