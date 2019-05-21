@@ -34,22 +34,14 @@ defmodule RemitWeb.ProfileControllerTest do
       })
 
     assert html_response(conn, 200)
-    test "POST /profiles when valid", %{conn: conn} do
-      conn =
-        post(conn, Routes.profile_path(conn, :create), %{
-          "profile" => %{"name" => "An Agent", "type" => "business", "currency" => "USD"}
-        })
-
-      assert profile = newest(Profile)
-      assert redirected_to(conn) == Routes.profile_path(conn, :show, profile)
-    end
-
-    test "POST /profiles when invalid", %{conn: conn} do
   end
 
   test "GET /profiles/:id", %{conn: conn} do
     {:ok, profile} =
-      Profile.create(%{name: "An Agent", type: "business", currency: "USD", user_id: "1"}, "business")
+      Profile.create(
+        %{name: "An Agent", type: "business", currency: "USD", user_id: "1"},
+        "business"
+      )
 
     conn = get(conn, Routes.profile_path(conn, :show, profile))
     assert html_response(conn, 200)
@@ -57,7 +49,10 @@ defmodule RemitWeb.ProfileControllerTest do
 
   test "GET /profiles/:id/edit", %{conn: conn} do
     {:ok, profile} =
-      Profile.create(%{name: "An Agent", type: "business", currency: "USD", user_id: "1"}, "business")
+      Profile.create(
+        %{name: "An Agent", type: "business", currency: "USD", user_id: "1"},
+        "business"
+      )
 
     conn = get(conn, Routes.profile_path(conn, :edit, profile))
     assert html_response(conn, 200)
@@ -65,7 +60,10 @@ defmodule RemitWeb.ProfileControllerTest do
 
   test "PUT /profiles/:id", %{conn: conn} do
     {:ok, profile} =
-      Profile.create(%{name: "An Agent", type: "business", currency: "USD", user_id: "1"}, "business")
+      Profile.create(
+        %{name: "An Agent", type: "business", currency: "USD", user_id: "1"},
+        "business"
+      )
 
     conn =
       put(conn, Routes.profile_path(conn, :update, profile), %{
@@ -95,13 +93,31 @@ defmodule RemitWeb.ProfileControllerTest do
   test "POST/new-profile with invalid params", %{conn: conn} do
     conn =
       post(conn, Routes.profile_path(conn, :create_business_profile), %{
-        "new profile" => %{"name" => "An Agent", "type" => "business", "currency" => "", "user_id" => "1", "profile_id" => "1", "role" => "admin"}, "profile-type" => "business"})
+        "new profile" => %{
+          "name" => "An Agent",
+          "type" => "business",
+          "currency" => "",
+          "user_id" => "1",
+          "profile_id" => "1",
+          "role" => "admin"
+        },
+        "profile-type" => "business"
+      })
   end
 
   test "POST/new-profile with valid params", %{conn: conn} do
     conn =
-      post(conn, Routes.profile_path(conn, :create_business_profile), %{"new profile" => %{"name" => "An Agent", "type" => "business", "currency" => "KES", "user_id" => "1",
-      "profile_id" => "1", "role" => "admin"}})
+      post(conn, Routes.profile_path(conn, :create_business_profile), %{
+        "new profile" => %{
+          "name" => "An Agent",
+          "type" => "business",
+          "currency" => "KES",
+          "user_id" => "1",
+          "profile_id" => "1",
+          "role" => "admin"
+        }
+      })
+
     assert redirected_to(conn) == Routes.profile_path(conn, :show, "profiles/:id")
     assert newprofile = Repo.get_by!(Profile, name: "business")
   end

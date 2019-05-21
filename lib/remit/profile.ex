@@ -20,12 +20,11 @@ defmodule Remit.Profile do
     timestamps()
   end
 
-
   @doc false
   def changeset(profile, attrs \\ %{}) do
     profile
-    |> cast(attrs, [:name, :type, :currency, :user_id])
-    |> validate_required([:name, :type, :currency, :user_id])
+    |> cast(attrs, [:name, :type, :currency])
+    |> validate_required([:name, :type, :currency])
     |> process_slug
     |> unique_constraint(:name, name: "profiles_slug_index")
   end
@@ -40,25 +39,23 @@ defmodule Remit.Profile do
     end
   end
 
-
-  def create_with_user(user, form_params)  do
-
-    changeset = %__MODULE__{}
-    changeset(%{ form_params | user_id: user.id})
-
+  def create_with_user(user, form_params) do
+    changeset =
+      %__MODULE__{}
+      |> change(user_id: user.id)
+      |> changeset(form_params)
 
     Repo.transaction(fn ->
       case Repo.insert(changeset) do
         {:ok, profile} ->
-
           # insert record into user profiles
-           case UserProfiles.create(%{"profile_id" => profile.id, "user_id" => profile.user_id}) do
+          case UserProfiles.create(%{"profile_id" => profile.id, "user_id" => profile.user_id}) do
             {:ok, userprofiles} ->
               userprofiles
 
             {:eror, userprofiles} ->
               Repo.rollback(userprofiles)
-           end
+          end
 
         {:error, changeset} ->
           Repo.rollback(changeset)

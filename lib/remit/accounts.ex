@@ -76,7 +76,7 @@ defmodule Remit.Accounts do
         |> Ecto.Changeset.change(require_password_change: true)
         |> User.changeset(user)
 
-        result = Repo.insert(changeset)
+      result = Repo.insert(changeset)
 
       case result do
         {:ok, user} ->
