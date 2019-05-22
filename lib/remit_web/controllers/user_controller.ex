@@ -92,19 +92,23 @@ defmodule RemitWeb.UserController do
   end
 
   def reset_action(conn, %{"id" => user_id}) do
-    user = Account.get_user!(user_id)
+    user = Accounts.get_user!(user_id)
     pass = random_pass(25)
 
-    case User.set_require_password_change(user, pass) do
-      {:ok, user} ->
-        conn
-        |> put_flash(:info, "Your password has been reset")
-        |> redirect(to: Routes.user_path(conn, :show, user))
+    conn =
+      case User.set_require_password_change(user, pass) do
+        {:ok, _} ->
+          conn
+          |> put_flash(:info, "Your password has been reset")
 
-      {:error, _} ->
-        conn
-        |> put_flash(:info, "Password has been resent")
-        |> redirect(to: Routes.user_path(conn, :show, user))
-    end
+        {:error, _} ->
+          conn
+          |> put_flash(
+            :error,
+            "Password had already been changed, ask the user to reset their password."
+          )
+      end
+
+    conn |> redirect(to: Routes.user_path(conn, :show, user))
   end
 end

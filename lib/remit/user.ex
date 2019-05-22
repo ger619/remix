@@ -57,9 +57,17 @@ defmodule Remit.User do
       or_where: ilike(x.id_number, ^search_query)
   end
 
-  def set_require_password_change(user, new_password) do
-    user
-    |> changeset(%{require_password_change: true, password_hash: new_password})
-    |> Repo.update()
+  def set_require_password_change(user = %{require_password_change: true}, new_password) do
+    user =
+      user
+      |> change(%{require_password_change: true, password_hash: new_password})
+      |> password_hash()
+      |> Repo.update!()
+
+    {:ok, user}
+  end
+
+  def set_require_password_change(_, _) do
+    {:error, :already_reset}
   end
 end

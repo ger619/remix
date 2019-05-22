@@ -17,7 +17,7 @@ defmodule Remit.Profile do
     belongs_to(:user, User)
 
     timestamps()
-  end
+  end  
 
   @doc false
   def changeset(profile, attrs \\ %{}) do
@@ -58,7 +58,7 @@ defmodule Remit.Profile do
           profile
 
         {:error, changeset} ->
-          Repo.rollback(changeset) 
+          Repo.rollback(changeset)
       end
     end)
   end
