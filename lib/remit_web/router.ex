@@ -29,6 +29,7 @@ defmodule RemitWeb.Router do
 
     get "/", PageController, :index
     resources "/sessions", SessionController, only: [:new, :create]
+
   end
 
   scope "/", RemitWeb do
@@ -45,5 +46,6 @@ defmodule RemitWeb.Router do
 
     get "/new-profile", ProfileController, :new_business_profile
     post "/new-pofile", ProfileController, :create_business_profile
+
   end
 end

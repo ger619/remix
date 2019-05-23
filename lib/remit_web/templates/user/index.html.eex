@@ -36,7 +36,6 @@
       <td>
         <%= link "Show", to: Routes.user_path(@conn, :show, user) %>
         <%= link "Edit", to: Routes.user_path(@conn, :edit, user) %>
-
       </td>
     </tr>
   <% end %>

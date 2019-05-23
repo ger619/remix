@@ -24,6 +24,6 @@ defmodule Remit.UserProfiles  do
   def create(params) do
     %__MODULE__{}
     |> changeset(params)
-    |> Repo.insert()
+    |> Repo.insert!()
   end
 end

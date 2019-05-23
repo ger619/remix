@@ -53,7 +53,6 @@ defmodule RemitWeb.UserController do
     :crypto.strong_rand_bytes(length) |> Base.url_encode64() |> binary_part(0, length)
   end
 
-  @spec show(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
     render(conn, "show.html", user: user)

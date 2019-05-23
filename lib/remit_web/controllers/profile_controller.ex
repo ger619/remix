@@ -3,7 +3,6 @@ defmodule RemitWeb.ProfileController do
 
   alias Remit.Repo
   alias Remit.Profile
-  alias Remit.Sessions.Sessionhandler
 
   def index(conn, params) do
     page =
@@ -73,19 +72,17 @@ defmodule RemitWeb.ProfileController do
   def new_business_profile(conn, _params) do
     changeset = Profile.changeset(%Profile{})
     render(conn, "new_business_profile.html", changeset: changeset)
-
   end
 
-  def create_business_profile(conn, %{"params" => form_params}) do
-    current_user = Sessionhandler.current_user(conn)
-    case Profile.create_with_user(current_user, form_params) do
+  def create_business_profile(conn, %{"profile" => profile_params}) do
+    current_user = conn.assigns[:current_user]
+    case Profile.create_with_user(current_user, profile_params) do
       {:ok, user_profiles} ->
         conn
         |> redirect(to: Routes.profile_path(conn, :show, user_profiles))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new_business_profile.html", changeset: changeset)   
-
+        render(conn, "new_business_profile.html", changeset: changeset)
     end
   end
 end

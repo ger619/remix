@@ -48,19 +48,15 @@ defmodule Remit.Profile do
     Repo.transaction(fn ->
       case Repo.insert(changeset) do
         {:ok, profile} ->
-          # insert record into user profiles
-          case UserProfiles.create(%{"profile_id" => profile.id, "user_id" => profile.user_id}) do
-            {:ok, userprofiles} ->
-              userprofiles
-
-            {:eror, userprofiles} ->
-              Repo.rollback(userprofiles)
-          end
+          
+           UserProfiles.create(
+             %{"profile_id" => profile.id, "user_id" => profile.user_id, "role" => form_params["role"]})
+             profile
 
         {:error, changeset} ->
           Repo.rollback(changeset)
-      end
-    end)
+        end
+      end)
   end
 
   def search_query(q) do
