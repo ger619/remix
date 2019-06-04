@@ -35,6 +35,7 @@ defmodule Remit.User do
     ])
     |> validate_required([:name, :phone_number, :email, :id_number, :id_type])
     |> unique_constraint(:phone_number)
+    |> validate_format(:email, ~r/@/)
     |> password_hash()
   end
 
