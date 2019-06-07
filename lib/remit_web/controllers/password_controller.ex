@@ -1,8 +1,7 @@
 defmodule RemitWeb.PasswordController do
   use RemitWeb, :controller
 
-  alias Remit.Accounts
-  alias Remit.PasswordChange
+  alias Remit.{Accounts, PasswordChange}
 
   def index(conn, _params) do
     changeset = %PasswordChange{} |> PasswordChange.changeset(%{})

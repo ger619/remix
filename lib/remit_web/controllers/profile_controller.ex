@@ -1,14 +1,13 @@
 defmodule RemitWeb.ProfileController do
   use RemitWeb, :controller
 
-  alias Remit.Repo
-  alias Remit.Profile
+  alias Remit.{Repo, Profile}
 
   def index(conn, params) do
     page =
       case params["query"] do
         nil ->
-          Profile 
+          Profile
 
         term ->
           Profile.search_query(term)

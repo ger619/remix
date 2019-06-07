@@ -5,9 +5,9 @@ defmodule Remit.Sessions.Sessionhandler do
 
   import Ecto.Query, warn: false
 
-  alias Remit.Repo
-  alias Remit.User
-  alias Remit.Session
+  alias Remit.{Repo, User, Session}
+  # alias Remit.User
+  # alias Remit.Session
 
   def list_sessions({%User{} = user}) do
     sessions = Repo.preload(user, :sessions).sessions

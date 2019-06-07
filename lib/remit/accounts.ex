@@ -5,10 +5,7 @@ defmodule Remit.Accounts do
 
   import Ecto.Query, warn: false
 
-  alias Remit.Repo
-  alias Remit.User
-  alias Remit.Profile
-  alias Remit.Session
+  alias Remit.{Repo, User, Profile, Session}
   alias Remit.Sessions.Sessionhandler
 
   @doc """

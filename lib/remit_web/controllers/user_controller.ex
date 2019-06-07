@@ -1,11 +1,7 @@
 defmodule RemitWeb.UserController do
   use RemitWeb, :controller
 
-  alias Remit.Repo
-  alias Remit.User
-  alias Remit.Accounts
-  alias Remit.IDType
-  alias Remit.SMS
+  alias Remit.{Repo, User, Accounts, IDType, SMS}
 
   def index(conn, params) do
     page =
