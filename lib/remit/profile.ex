@@ -7,7 +7,7 @@ defmodule Remit.Profile do
   alias Remit.Repo
   alias Remit.User
 
-  alias Remit.Account.Account
+  alias Remit.Account
 
   schema "profiles" do
     field :name, :string
@@ -58,7 +58,7 @@ defmodule Remit.Profile do
           profile
 
         {:error, changeset} ->
-          Repo.rollback(changeset) 
+          Repo.rollback(changeset)
       end
     end)
   end
