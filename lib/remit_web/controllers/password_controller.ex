@@ -22,4 +22,8 @@ defmodule RemitWeb.PasswordController do
         |> redirect(to: Routes.page_path(conn, :dashboard))
     end
   end
+
+  
+
+
 end

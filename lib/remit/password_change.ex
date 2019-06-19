@@ -37,4 +37,5 @@ defmodule Remit.PasswordChange do
         error
     end
   end
+  
 end
