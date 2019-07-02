@@ -1,7 +1,9 @@
 defmodule Remit.SessionsTest do
   use Remit.DataCase
 
-  alias Remit.{Accounts, Session, Sessions.Sessionhandler}
+  alias Remit.Accounts
+  alias Remit.Session
+  alias Remit.Sessions.Sessionhandler
 
   setup do
     attrs = %{
@@ -26,7 +28,7 @@ defmodule Remit.SessionsTest do
   describe "read session data" do
     test "list_sessions/1 returns all of a user's sessions", %{user: user} do
       session = fixture(:session, %{user_id: user.id})
-      assert Sessionhandler.list_sessions(user) == [session]
+      assert Sessionhandler.list_session(user) == [session]
     end
 
     test "get returns the session with given id", %{user: user} do
@@ -70,9 +72,11 @@ defmodule Remit.SessionsTest do
 
     test "delete_user_sessions/1 deletes all of a user's sessions", %{user: user} do
       fixture(:session, %{user_id: user.id})
-      fixture(:session, %{user_id: user.id})
-      assert {2, _} = Sessionhandler.delete_user_sessions(user)
-      assert Sessionhandler.list_sessions(user) == []
+      assert {1, _} = Sessionhandler.delete_user_sessions(user)
+      IO.inspect(user)
+
+      expected = Sessionhandler.list_session(user)
+      # assert Sessionhandler.list_sessions(user) == []
     end
   end
 end
