@@ -2,8 +2,8 @@ defmodule Remit.User do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
+
   alias Remit.Session
-  alias Remit.Profile
 
   schema "users" do
     field :name, :string, null: false
@@ -16,7 +16,6 @@ defmodule Remit.User do
     field :super_admin, :boolean, default: false
     field :require_password_change, :boolean, default: false
     has_many :sessions, Session, on_delete: :delete_all
-    has_many :profile, Profile, on_delete: :delete_all
 
     timestamps()
   end
