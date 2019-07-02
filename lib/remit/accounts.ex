@@ -69,14 +69,14 @@ defmodule Remit.Accounts do
 
   """
 
-  def create_user(user) do
+  def create_user(params) do
     Repo.transaction(fn ->
       changeset =
         %User{}
         |> Ecto.Changeset.change(require_password_change: true)
-        |> User.changeset(user)
+        |> User.changeset(params)
 
-        result = Repo.insert(changeset)
+      result = Repo.insert(changeset)
 
       case result do
         {:ok, user} ->

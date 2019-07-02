@@ -30,7 +30,7 @@ defmodule RemitWeb.UserController do
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"user" => user_params}) do
     password = random_pass(6)
-    user_params = Map.merge(user_params, %{"password_hash" => password})
+    user_params = Map.put(user_params, "password_hash", password)
 
     case Accounts.create_user(user_params) do
       {:ok, user} ->
