@@ -137,6 +137,7 @@ defmodule RemitWeb.UserControllerTest do
     setup [:verify_on_exit!, :create_user]
 
     test "POST /users/:id/reset when require_password_change is true", %{conn: conn, user: user} do
+      #line 139 has an error
       Remit.SMSMock
       |> expect(:deliver, fn phone_number, message, _config ->
         assert phone_number == @create_attrs.phone_number
