@@ -33,12 +33,9 @@ defmodule RemitWeb.Router do
 
   scope "/", RemitWeb do
     pipe_through [:browser, :authenticated]
-
     get "/dashboard", PageController, :dashboard
-
     get "/password-change", PasswordController, :index
     post "/password-change", PasswordController, :create
-
     resources "/profiles", ProfileController, except: [:delete]
     resources "/users", UserController
     resources "/sessions", SessionController, only: [:delete]

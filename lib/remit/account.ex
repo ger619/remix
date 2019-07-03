@@ -1,4 +1,4 @@
-defmodule Remit.Account.Account do
+defmodule Remit.Account do
   use Ecto.Schema
   import Ecto.Changeset
 

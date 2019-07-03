@@ -1,11 +1,7 @@
 defmodule RemitWeb.UserController do
   use RemitWeb, :controller
 
-  alias Remit.Repo
-  alias Remit.User
-  alias Remit.Accounts
-  alias Remit.IDType
-  alias Remit.SMS
+  alias Remit.{Repo, User, Accounts, IDType, SMS}
 
   def index(conn, params) do
     page =
@@ -27,10 +23,14 @@ defmodule RemitWeb.UserController do
     render(conn, "new.html", changeset: changeset, id_types: id_types)
   end
 
+  defp random_pass(length) do
+    :crypto.strong_rand_bytes(length) |> Base.url_encode64() |> binary_part(0, length)
+  end
+
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"user" => user_params}) do
     password = random_pass(6)
-    Map.merge(user_params, %{"password_hash" => password})
+    user_params = Map.put(user_params, "password_hash", password)
 
     case Accounts.create_user(user_params) do
       {:ok, user} ->
@@ -47,10 +47,6 @@ defmodule RemitWeb.UserController do
         id_types = IDType.all()
         render(conn, "new.html", changeset: changeset, id_types: id_types)
     end
-  end
-
-  defp random_pass(length) do
-    :crypto.strong_rand_bytes(length) |> Base.url_encode64() |> binary_part(0, length)
   end
 
   @spec show(Plug.Conn.t(), map()) :: Plug.Conn.t()

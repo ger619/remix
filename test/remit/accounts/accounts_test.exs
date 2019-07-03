@@ -7,20 +7,20 @@ defmodule Remit.AccountsTest do
     alias Remit.User
 
     @valid_attrs %{
-      email: "some email",
-      id_number: "some id_number",
+      email: "some@email.com",
+      id_number: "some_id_number",
       id_type: "national_id",
-      name: "some name",
-      password_hash: "some password_hash",
-      phone_number: "some phone_number"
+      name: "some_name",
+      password_hash: "some_password_hash",
+      phone_number: "some_phone_number"
     }
     @update_attrs %{
-      email: "some updated email",
-      id_number: "some updated id_number",
+      email: "some@updatedemail.com",
+      id_number: "some_updated_id_number",
       id_type: "national_id",
-      name: "some updated name",
-      password_hash: "some updated password_hash",
-      phone_number: "some updated phone_number"
+      name: "some_updated_name",
+      password_hash: "some_updated_password_hash",
+      phone_number: "some_updated_phone_number"
     }
     @invalid_attrs %{
       email: nil,
@@ -64,12 +64,12 @@ defmodule Remit.AccountsTest do
 
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
-      assert user.email == "some email"
-      assert user.id_number == "some id_number"
+      assert user.email == "some@email.com"
+      assert user.id_number == "some_id_number"
       assert user.id_type == "national_id"
-      assert user.name == "some name"
-      assert user.password_hash
-      assert user.phone_number == "some phone_number"
+      assert user.name == "some_name"
+      assert Bcrypt.check_pass("some_password_hash", user.password_hash)
+      assert user.phone_number == "some_phone_number"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -79,12 +79,12 @@ defmodule Remit.AccountsTest do
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
       assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs)
-      assert user.email == "some updated email"
-      assert user.id_number == "some updated id_number"
+      assert user.email == "some@updatedemail.com"
+      assert user.id_number == "some_updated_id_number"
       assert user.id_type == "national_id"
-      assert user.name == "some updated name"
-      assert user.password_hash
-      assert user.phone_number == "some updated phone_number"
+      assert user.name == "some_updated_name"
+      assert Bcrypt.check_pass("some_updated_password_hash", user.password_hash)
+      assert user.phone_number == "some_updated_phone_number"
     end
 
     test "update_user/2 with invalid data returns error changeset" do
