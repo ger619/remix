@@ -5,7 +5,6 @@ defmodule RemitWeb.UserControllerTest do
 
   alias Remit.Repo
   alias Remit.Accounts
-  alias Remit.IDType
 
   @moduletag authenticate: %{email: "user@example.com"}
 
