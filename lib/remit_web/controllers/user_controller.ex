@@ -36,7 +36,7 @@ defmodule RemitWeb.UserController do
       {:ok, user} ->
         SMS.deliver(
           user.phone_number,
-          "Your new password is #{password} logon to #{Routes.page_path(conn, :index)} to change it"
+          "Your new password is #{password} logon to #{Routes.page_url(conn, :index)} to change it"
         )
 
         conn
