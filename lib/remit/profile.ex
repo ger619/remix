@@ -16,6 +16,12 @@ defmodule Remit.Profile do
     field :type, :string
     field :currency, :string
     belongs_to(:user, User)
+    many_to_many(
+      :users,
+      User,
+      join_through: "user_profiles",
+      on_replace: :delete
+    )
 
     timestamps()
   end
@@ -40,20 +46,21 @@ defmodule Remit.Profile do
   end
 
   def create_with_user(user, form_params) do
+    form_params = Map.put(form_params, "type", "business")
+
     changeset =
       %__MODULE__{}
-      |> change(user_id: user.id)
       |> changeset(form_params)
 
     Repo.transaction(fn ->
       case Repo.insert(changeset) do
         {:ok, profile} ->
+
           UserProfiles.create(%{
             "profile_id" => profile.id,
-            "user_id" => profile.user_id,
-            "role" => form_params["role"]
+            "user_id" => user.id,
+            "role" => "admin"
           })
-
           profile
 
         {:error, changeset} ->
@@ -67,6 +74,13 @@ defmodule Remit.Profile do
 
     from x in __MODULE__,
       where: ilike(x.name, ^search_query)
+  end
+
+  def search(query, search_term) do
+    wildcard_search = "%#{search_term}%"
+
+    from profile in query,
+    where: ilike(profile.name, ^wildcard_search)
   end
 
   def create(params, profile_type) when profile_type in ["user", "business"] do

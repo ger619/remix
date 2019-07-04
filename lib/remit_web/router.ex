@@ -45,7 +45,7 @@ defmodule RemitWeb.Router do
     resources "/sessions", SessionController, only: [:delete]
 
     get "/new-profile", ProfileController, :new_business_profile
-    post "/new-pofile", ProfileController, :create_business_profile
+    post "/new-profile", ProfileController, :create_business_profile
 
   end
 end

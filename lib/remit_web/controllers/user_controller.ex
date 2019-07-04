@@ -27,7 +27,6 @@ defmodule RemitWeb.UserController do
     render(conn, "new.html", changeset: changeset, id_types: id_types)
   end
 
-  @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"user" => user_params}) do
     password = random_pass(6)
     Map.merge(user_params, %{"password_hash" => password})
