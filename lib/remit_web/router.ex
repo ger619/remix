@@ -14,14 +14,11 @@ defmodule RemitWeb.Router do
 
   pipeline :authenticated do
     plug :user_check
+    plug :guest_pass
   end
 
   pipeline :guest do
     plug :guest_check
-  end
-
-  pipeline :password do
-    plug :guest_pass
   end
 
   pipeline :api do
@@ -36,7 +33,7 @@ defmodule RemitWeb.Router do
   end
 
   scope "/", RemitWeb do
-    pipe_through [:browser, :guest_pass]
+    pipe_through [:browser, :authenticated]
     post "/password_change", PasswordController, :create
     get "/password_change", PasswordController, :index
   end
