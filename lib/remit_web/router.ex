@@ -20,6 +20,10 @@ defmodule RemitWeb.Router do
     plug :guest_check
   end
 
+  pipeline :password do
+    plug :guest_pass
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -32,12 +36,17 @@ defmodule RemitWeb.Router do
   end
 
   scope "/", RemitWeb do
+    pipe_through [:browser, :guest_pass]
+    post "/password_change", PasswordController, :create
+    get "/password_change", PasswordController, :index
+  end
+
+  scope "/", RemitWeb do
     pipe_through [:browser, :authenticated]
     get "/dashboard", PageController, :dashboard
-    get "/password-change", PasswordController, :index
-    post "/password-change", PasswordController, :create
     resources "/profiles", ProfileController, except: [:delete]
     resources "/users", UserController
+    post "/user/:id/reset", UserController, :reset_action
     resources "/sessions", SessionController, only: [:delete]
   end
 end

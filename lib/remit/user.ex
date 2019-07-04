@@ -2,6 +2,7 @@ defmodule Remit.User do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
+  alias Remit.Repo
 
   alias Remit.Session
 
@@ -40,7 +41,8 @@ defmodule Remit.User do
   end
 
   defp password_hash(
-         %Ecto.Changeset{valid?: true, changes: %{password_hash: password}} = changeset
+         %Ecto.Changeset
+         {valid?: true, changes: %{password_hash: password}} = changeset
        ) do
     put_change(changeset, :password_hash, Bcrypt.hash_pwd_salt(password))
   end
@@ -55,5 +57,19 @@ defmodule Remit.User do
     from x in __MODULE__,
       where: ilike(x.name, ^search_query),
       or_where: ilike(x.id_number, ^search_query)
+  end
+
+  def set_require_password_change(user = %{require_password_change: true}, new_password) do
+    user =
+      user
+      |> change(%{require_password_change: true, password_hash: new_password})
+      |> password_hash()
+      |> Repo.update!()
+
+    {:ok, user}
+  end
+
+  def set_require_password_change(_, _) do
+    {:error, :already_reset}
   end
 end
