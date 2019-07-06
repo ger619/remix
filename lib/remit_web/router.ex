@@ -14,7 +14,7 @@ defmodule RemitWeb.Router do
 
   pipeline :authenticated do
     plug :user_check
-    plug :guest_pass
+    # plug :guest_pass
   end
 
   pipeline :guest do
@@ -32,16 +32,18 @@ defmodule RemitWeb.Router do
     resources "/sessions", SessionController, only: [:new, :create]
   end
 
-  scope "/", RemitWeb do
-    pipe_through [:browser, :authenticated]
-    post "/password_change", PasswordController, :create
-    get "/password_change", PasswordController, :index
-  end
+  # scope "/", RemitWeb do
+  #   pipe_through [:browser, :authenticated]
+  #   post "/password_change", PasswordController, :create
+  #   get "/password_change", PasswordController, :index
+  # end
 
   scope "/", RemitWeb do
     pipe_through [:browser, :authenticated]
     get "/dashboard", PageController, :dashboard
     resources "/profiles", ProfileController, except: [:delete]
+    post "/password_change", PasswordController, :create
+    get "/password_change", PasswordController, :index
     resources "/users", UserController
     post "/user/:id/reset", UserController, :reset_action
     resources "/sessions", SessionController, only: [:delete]

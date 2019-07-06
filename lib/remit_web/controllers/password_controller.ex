@@ -23,11 +23,6 @@ defmodule RemitWeb.PasswordController do
 
     case PasswordChange.update_password(params, user) do
       {:ok, _} ->
-        SMS.deliver(
-          user.phone_number,
-          "Your new password is #{password} logon to #{Routes.page_url(conn, :index)} to change it"
-        )
-
         conn
         |> put_flash(:info, "Your password has been updated.")
         |> redirect(to: Routes.page_path(conn, :dashboard))

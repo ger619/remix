@@ -89,11 +89,16 @@ defmodule RemitWeb.UserController do
 
   def reset_action(conn, %{"id" => user_id}) do
     user = Accounts.get_user!(user_id)
-    pass = random_pass(25)
+    pass = random_pass(6)
 
     conn =
       case User.set_require_password_change(user, pass) do
         {:ok, _} ->
+          SMS.deliver(
+            user.phone_number,
+            "Your new password is #{pass} logon to #{Routes.user_url(conn, :index)} to change it"
+          )
+
           conn
           |> put_flash(:info, "Your password has been reset")
 
