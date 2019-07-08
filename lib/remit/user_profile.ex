@@ -1,6 +1,6 @@
 defmodule Remit.UserProfiles  do
   use Ecto.Schema
-  import Ecto.Changeset
+  import Ecto.{Changeset, Query}
 
   alias Remit.{User, Profile, Repo}
 
@@ -24,4 +24,23 @@ defmodule Remit.UserProfiles  do
     |> changeset(params)
     |> Repo.insert!()
   end
+
+  def search_query(q) do
+    q = "%#{q}%"
+    from(u in __MODULE__,
+      left_join: x in assoc(u, :user),
+      left_join: y in assoc(u, :profile),
+      preload: [user: x, profile: y],
+      where: ilike(x.name, ^q),
+      or_where: ilike(y.name, ^q)
+      )
+  end
+
+  def join_user_query()  do
+    from(u in __MODULE__,
+    join: x in assoc(u, :user),
+    join: y in assoc(u, :profile),
+    preload: [user: x, profile: y])
+  end
+
 end

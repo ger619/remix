@@ -76,12 +76,6 @@ defmodule Remit.Profile do
       where: ilike(x.name, ^search_query)
   end
 
-  def search(query, search_term) do
-    wildcard_search = "%#{search_term}%"
-
-    from profile in query,
-    where: ilike(profile.name, ^wildcard_search)
-  end
 
   def create(params, profile_type) when profile_type in ["user", "business"] do
     changeset =
@@ -111,7 +105,6 @@ defmodule Remit.Profile do
   def list_profiles do
     Repo.all(__MODULE__)
   end
-
   def get_profile!(id), do: Repo.get!(__MODULE__, id)
 
   def update_profile(%__MODULE__{} = profile, params) do

@@ -36,6 +36,7 @@ defmodule RemitWeb.Router do
     pipe_through [:browser, :authenticated]
 
     get "/dashboard", PageController, :dashboard
+    post "/dashboard", PageController, :dashboard
 
     get "/password-change", PasswordController, :index
     post "/password-change", PasswordController, :create

@@ -1,7 +1,6 @@
 defmodule Remit.User do
   use Ecto.Schema
-  import Ecto.Changeset
-  import Ecto.Query
+  import Ecto.{Changeset, Query}
 
   alias Remit.{Session, Profile, Repo}
 
