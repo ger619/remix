@@ -3,9 +3,9 @@ defmodule RemitWeb.PasswordController do
 
   alias Remit.Accounts
   alias Remit.PasswordChange
-  alias Remit.SMS
+  # alias Remit.SMS
   alias Remit.Accounts
-  alias Remit.SMS
+  # alias Remit.SMS
 
   # alias Remit.User
 
@@ -26,11 +26,6 @@ defmodule RemitWeb.PasswordController do
 
     case PasswordChange.update_password(user, params) do
       {:ok, _} ->
-        SMS.deliver(
-          user.phone_number,
-          "Your new password is #{password} logon to http://… to change it"
-        )
-
         conn
         |> put_flash(:info, "Your password has been updated.")
         |> redirect(to: Routes.page_path(conn, :dashboard))

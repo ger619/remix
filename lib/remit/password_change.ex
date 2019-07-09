@@ -8,11 +8,12 @@ defmodule Remit.PasswordChange do
     field :current_password
     field :password
     field :password_confirmation
+    belongs_to :user, User
   end
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:current_password, :password, :current_password])
+    |> cast(params, [:current_password, :password, :password_confirmation, :user_id])
     |> validate_required([:current_password, :password])
     |> validate_confirmation(:password, message: "Password doesn't match")
   end

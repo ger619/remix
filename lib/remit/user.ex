@@ -5,6 +5,7 @@ defmodule Remit.User do
   alias Remit.Repo
 
   alias Remit.Session
+  alias Remit.PasswordChange
 
   schema "users" do
     field :name, :string, null: false
@@ -17,6 +18,7 @@ defmodule Remit.User do
     field :super_admin, :boolean, default: false
     field :require_password_change, :boolean, default: false
     has_many :sessions, Session, on_delete: :delete_all
+    has_one :password, PasswordChange
 
     timestamps()
   end
@@ -40,8 +42,7 @@ defmodule Remit.User do
   end
 
   defp password_hash(
-         %Ecto.Changeset
-         {valid?: true, changes: %{password_hash: password}} = changeset
+         %Ecto.Changeset{valid?: true, changes: %{password_hash: password}} = changeset
        ) do
     put_change(changeset, :password_hash, Bcrypt.hash_pwd_salt(password))
   end
