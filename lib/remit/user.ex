@@ -1,9 +1,10 @@
 defmodule Remit.User do
   use Ecto.Schema
+
   import Ecto.Changeset
   import Ecto.Query
-  alias Remit.Repo
 
+  alias Remit.Repo
   alias Remit.Session
 
   schema "users" do
@@ -21,7 +22,6 @@ defmodule Remit.User do
     timestamps()
   end
 
-  Accounts
   @doc false
   def changeset(user, attrs) do
     user
@@ -41,8 +41,7 @@ defmodule Remit.User do
   end
 
   defp password_hash(
-         %Ecto.Changeset
-         {valid?: true, changes: %{password_hash: password}} = changeset
+         %Ecto.Changeset{valid?: true, changes: %{password_hash: password}} = changeset
        ) do
     put_change(changeset, :password_hash, Bcrypt.hash_pwd_salt(password))
   end
