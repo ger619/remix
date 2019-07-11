@@ -14,7 +14,7 @@ defmodule Remit.Profile do
     belongs_to(:user, User)
 
     timestamps()
-  end
+  end  
 
   @doc false
   def changeset(profile, attrs \\ %{}) do

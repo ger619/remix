@@ -1,7 +1,8 @@
 defmodule RemitWeb.PasswordController do
   use RemitWeb, :controller
 
-  alias Remit.{Accounts, PasswordChange}
+  alias Remit.Accounts
+  alias Remit.PasswordChange
 
   def index(conn, _params) do
     changeset = %PasswordChange{} |> PasswordChange.changeset(%{})
@@ -9,9 +10,9 @@ defmodule RemitWeb.PasswordController do
   end
 
   def create(conn, %{"password_change" => params}) do
-    user = conn.assigns.current_user.id |> Accounts.get_user!()
+    user = Accounts.get_user!(conn.assigns.current_user.id)
 
-    case PasswordChange.update_password(params, user) do
+    case PasswordChange.update_password(user, params) do
       {:ok, _} ->
         conn
         |> put_flash(:info, "Your password has been updated.")

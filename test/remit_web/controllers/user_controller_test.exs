@@ -5,7 +5,6 @@ defmodule RemitWeb.UserControllerTest do
 
   alias Remit.Repo
   alias Remit.Accounts
-  alias Remit.IDType
 
   @moduletag authenticate: %{email: "user@example.com"}
 
@@ -131,6 +130,33 @@ defmodule RemitWeb.UserControllerTest do
       conn = get(conn, Routes.user_path(conn, :show, user))
       # user is still shown when archived
       assert html_response(conn, 200)
+    end
+  end
+
+  describe "reset password" do
+    setup [:verify_on_exit!, :create_user]
+
+    test "POST /users/:id/reset when require_password_change is true", %{conn: conn, user: user} do
+      #line 139 has an error
+      Remit.SMSMock
+      |> expect(:deliver, fn phone_number, message, _config ->
+        assert phone_number == @create_attrs.phone_number
+        assert message =~ "Your new password is"
+        {:ok, nil}
+      end)
+
+      conn = post(conn, Routes.user_path(conn, :reset_action, user))
+      assert redirected_to(conn) == Routes.user_path(conn, :show, user)
+      assert get_flash(conn, :info)
+      assert %{require_password_change: true} = Accounts.get_user!(user.id)
+    end
+
+    test "POST /users/:id/reset when require_password_change is false", %{conn: conn, user: user} do
+      user |> Ecto.Changeset.change(require_password_change: false) |> Repo.update!()
+      conn = post(conn, Routes.user_path(conn, :reset_action, user))
+      assert redirected_to(conn) == Routes.user_path(conn, :show, user)
+      # assert get_flash(conn, :error)
+      assert %{require_password_change: false} = Accounts.get_user!(user.id)
     end
   end
 

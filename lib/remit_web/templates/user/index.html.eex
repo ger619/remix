@@ -36,7 +36,9 @@
       <td>
         <%= link "Show", to: Routes.user_path(@conn, :show, user) %>
         <%= link "Edit", to: Routes.user_path(@conn, :edit, user) %>
-
+        <%= if user.require_password_change do %>
+        <%= link "Reset PassWord", to: Routes.user_path(@conn, :reset_action, user ), method: :post,  data: [confirm: "Are you sure?"] %>
+        <% end %>
       </td>
     </tr>
   <% end %>
