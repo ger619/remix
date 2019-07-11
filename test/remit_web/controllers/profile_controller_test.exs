@@ -4,7 +4,6 @@ defmodule RemitWeb.ProfileControllerTest do
   alias Remit.Repo
   alias Remit.Profile
 
-
   @moduletag authenticate: %{email: "user@example.com"}
 
   test "GET /profiles", %{conn: conn} do
@@ -104,10 +103,11 @@ defmodule RemitWeb.ProfileControllerTest do
         },
         "profile-type" => "business"
       })
+
     assert html_response(conn, 200)
   end
 
-  test "POST/new-profile with valid params", %{conn: conn} do
+  test "POST /new-profile with valid params", %{conn: conn} do
     conn =
       post(conn, Routes.profile_path(conn, :create_business_profile), %{
         "profile" => %{
@@ -119,7 +119,8 @@ defmodule RemitWeb.ProfileControllerTest do
           "role" => "admin"
         }
       })
-     profile = newest(Profile)
+
+    profile = newest(Profile)
     assert redirected_to(conn) == Routes.profile_path(conn, :show, profile)
     assert profile = Repo.get_by!(Profile, name: "An Agent")
   end
