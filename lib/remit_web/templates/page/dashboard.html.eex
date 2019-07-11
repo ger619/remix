@@ -19,7 +19,7 @@
     <th>Type</th>
 </thead>
 <tbody>
-<%= for profile <- @userprofiles do %>
+<%= for profile <- @page do %>
 <tr>
 <td><%= profile.user.name %></td>
 <td><%= profile.profile.name %></td>
