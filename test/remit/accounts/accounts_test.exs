@@ -68,7 +68,7 @@ defmodule Remit.AccountsTest do
       assert user.id_number == "some_id_number"
       assert user.id_type == "national_id"
       assert user.name == "some_name"
-      assert Bcrypt.check_pass("some_password_hash", user.password_hash)
+      assert Bcrypt.verify_pass("some_password_hash", user.password_hash)
       assert user.phone_number == "some_phone_number"
     end
 
@@ -83,7 +83,7 @@ defmodule Remit.AccountsTest do
       assert user.id_number == "some_updated_id_number"
       assert user.id_type == "national_id"
       assert user.name == "some_updated_name"
-      assert Bcrypt.check_pass("some_updated_password_hash", user.password_hash)
+      assert Bcrypt.verify_pass("some_updated_password_hash", user.password_hash)
       assert user.phone_number == "some_updated_phone_number"
     end
 

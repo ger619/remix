@@ -43,35 +43,4 @@ defmodule RemitWeb.Authorize do
     |> redirect(to: Routes.session_path(conn, :new))
     |> halt()
   end
-
-  # def password_check(%Plug.Conn{assigns: %{current_user: nil}} = conn, _opts) do
-  #   need_password(conn)
-  # end
-  #
-  # def password_check(conn, _opts), do: conn
-  #
-  # @doc """
-  # Plug to only allow password flag false users to access the resource.
-  #
-  # See the session controller for an example.
-  # """
-  # def guest_pass(%Plug.Conn{assigns: %{require_password_change: false}} = conn, _opts), do: conn
-  #
-  # def guest_pass(
-  #       %Plug.Conn{assigns: %{require_password_change: _require_password_change}} = conn,
-  #       _opts
-  #     ) do
-  #   conn
-  #   # |> put_flash(:error, "You need to log out to view this page")
-  #   |> redirect(to: Routes.user_path(conn, :index))
-  #   |> halt()
-  # end
-  #
-  # defp need_password(conn) do
-  #   conn
-  #   |> put_session(:request_path, current_path(conn))
-  #   |> put_flash(:ok, "Enter Your Password")
-  #   |> redirect(to: Routes.password_path(conn, :new))
-  #   |> halt()
-  # end
 end

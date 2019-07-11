@@ -11,12 +11,12 @@ defmodule Remit.PasswordChange do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:current_password, :password, :current_password])
+    |> cast(params, [:current_password, :password])
     |> validate_required([:current_password, :password])
     |> validate_confirmation(:password, message: "Password doesn't match")
   end
 
-  def update_password(params, user) do
+  def update_password(user, params) do
     changes = changeset(%__MODULE__{}, params)
 
     with {:ok, struct} <- apply_action(changes, :update),

@@ -29,7 +29,9 @@ defmodule RemitWeb.PassWordControllerTest do
       })
 
     assert redirected_to(conn) == Routes.page_path(conn, :dashboard)
-    assert %{require_password_change: false} = Repo.get_by!(User, email: "test@example.com")
+    user = Repo.get_by!(User, email: "test@example.com")
+    assert %{require_password_change: false} = user
+    assert Bcrypt.verify_pass("abc456", user.password_hash)
   end
 
   test "POST /password-change when invalid", %{conn: conn} do
