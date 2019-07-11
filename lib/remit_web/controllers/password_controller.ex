@@ -3,9 +3,6 @@ defmodule RemitWeb.PasswordController do
 
   alias Remit.Accounts
   alias Remit.PasswordChange
-  alias Remit.SMS
-
-  # alias Remit.User
 
   def index(conn, _params) do
     changeset = %PasswordChange{} |> PasswordChange.changeset(%{})
