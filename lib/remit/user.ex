@@ -1,11 +1,11 @@
 defmodule Remit.User do
   use Ecto.Schema
+
   import Ecto.Changeset
   import Ecto.Query
-  alias Remit.Repo
 
+  alias Remit.Repo
   alias Remit.Session
-  alias Remit.PasswordChange
 
   schema "users" do
     field :name, :string, null: false
@@ -18,12 +18,10 @@ defmodule Remit.User do
     field :super_admin, :boolean, default: false
     field :require_password_change, :boolean, default: false
     has_many :sessions, Session, on_delete: :delete_all
-    has_one :password, PasswordChange
 
     timestamps()
   end
 
-  Accounts
   @doc false
   def changeset(user, attrs) do
     user
@@ -38,6 +36,7 @@ defmodule Remit.User do
     ])
     |> validate_required([:name, :phone_number, :email, :id_number, :id_type])
     |> unique_constraint(:phone_number)
+    |> validate_format(:email, ~r/@/)
     |> password_hash()
   end
 

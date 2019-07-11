@@ -4,10 +4,7 @@ defmodule Remit.Profile do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Remit.Repo
-  alias Remit.User
-
-  alias Remit.Account.Account
+  alias Remit.{Repo, User, Account}
 
   schema "profiles" do
     field :name, :string

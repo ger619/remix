@@ -1,11 +1,7 @@
 defmodule RemitWeb.UserController do
   use RemitWeb, :controller
 
-  alias Remit.Repo
-  alias Remit.User
-  alias Remit.Accounts
-  alias Remit.IDType
-  alias Remit.SMS
+  alias Remit.{Repo, User, Accounts, IDType, SMS}
 
   def index(conn, params) do
     page =
@@ -27,6 +23,10 @@ defmodule RemitWeb.UserController do
     render(conn, "new.html", changeset: changeset, id_types: id_types)
   end
 
+  defp random_pass(length) do
+    :crypto.strong_rand_bytes(length) |> Base.url_encode64() |> binary_part(0, length)
+  end
+
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"user" => user_params}) do
     password = random_pass(6)
@@ -36,7 +36,7 @@ defmodule RemitWeb.UserController do
       {:ok, user} ->
         SMS.deliver(
           user.phone_number,
-          "Your new password is #{password} logon to http://… to change it"
+          "Your new password is #{password} logon to #{Routes.page_url(conn, :index)} to change it"
         )
 
         conn
@@ -47,10 +47,6 @@ defmodule RemitWeb.UserController do
         id_types = IDType.all()
         render(conn, "new.html", changeset: changeset, id_types: id_types)
     end
-  end
-
-  defp random_pass(length) do
-    :crypto.strong_rand_bytes(length) |> Base.url_encode64() |> binary_part(0, length)
   end
 
   @spec show(Plug.Conn.t(), map()) :: Plug.Conn.t()
@@ -93,16 +89,15 @@ defmodule RemitWeb.UserController do
 
   def reset_action(conn, %{"id" => user_id}) do
     user = Accounts.get_user!(user_id)
-    password = random_pass(6)
+    pass = random_pass(6)
 
     conn =
-
-      case User.set_require_password_change(user, password) do
-        {:ok, _} -> SMS.deliver(
-          user.phone_number,
-          "Your new password is #{password} logon to #{Routes.user_path(conn, :show, user)}"
-        )
-
+      case User.set_require_password_change(user, pass) do
+        {:ok, _} ->
+          SMS.deliver(
+            user.phone_number,
+            "Your new password is #{pass} logon to #{Routes.user_url(conn, :index)} to change it"
+          )
 
           conn
           |> put_flash(:info, "Your password has been reset")

@@ -17,7 +17,7 @@ defmodule RemitWeb.SessionController do
         conn
         |> add_session(user, params)
         |> put_flash(:info, "User successfully logged in.")
-        |> redirect(to: get_session(conn, :request_path) || Routes.page_path(conn, :dashboard))
+        |> redirect(to: get_session(conn, :request_path) || Routes.user_path(conn, :index))
 
       {:error, message} ->
         conn

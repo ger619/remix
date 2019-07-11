@@ -9,22 +9,22 @@ defmodule RemitWeb.UserControllerTest do
   @moduletag authenticate: %{email: "user@example.com"}
 
   @create_attrs %{
-    email: "some email",
-    id_number: "some id_number",
+    email: "some@email.com",
+    id_number: "some_id_number",
     id_type: "national_id",
-    is_admin: "some is_admin",
-    name: "some name",
-    password_hash: "some password_hash",
-    phone_number: "some phone_number"
+    is_admin: "some_is_admin",
+    name: "some_name",
+    password_hash: "some_password_hash",
+    phone_number: "some_phone_number"
   }
   @update_attrs %{
-    email: "some updated email",
-    id_number: "some updated id_number",
+    email: "some@updatedemail.com",
+    id_number: "some_updated_id_number",
     id_type: "national_id",
-    is_admin: "some updated is_admin",
-    name: "some updated name",
-    password_hash: "some updated password_hash",
-    phone_number: "some updated phone_number"
+    is_admin: "some_updated_is_admin",
+    name: "some_updated_name",
+    password_hash: "some_updated_password_hash",
+    phone_number: "some_updated_phone_number"
   }
   @invalid_attrs %{
     email: nil,
@@ -111,7 +111,7 @@ defmodule RemitWeb.UserControllerTest do
       assert redirected_to(conn) == Routes.user_path(conn, :show, user)
 
       conn = get(conn, Routes.user_path(conn, :show, user))
-      assert html_response(conn, 200) =~ "some updated email"
+      assert html_response(conn, 200) =~ "some@updatedemail.com"
     end
 
     test "renders errors when data is invalid", %{conn: conn, user: user} do
