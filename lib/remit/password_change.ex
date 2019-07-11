@@ -23,6 +23,7 @@ defmodule Remit.PasswordChange do
          true <- Bcrypt.verify_pass(struct.current_password, user.password_hash) do
       user
       |> User.changeset(%{password_hash: struct.password})
+      |> change(require_password_change: false)
       |> Repo.update()
     else
       false ->
