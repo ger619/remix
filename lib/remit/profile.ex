@@ -4,11 +4,7 @@ defmodule Remit.Profile do
   import Ecto.Changeset
   import Ecto.Query, only: [from: 2]
 
-  alias Remit.Repo
-  alias Remit.User
-
-  alias Remit.Account.Account
-  alias Remit.UserProfiles
+  alias Remit.{Repo, User, Account, UserProfiles}
 
   schema "profiles" do
     field :name, :string
@@ -16,6 +12,7 @@ defmodule Remit.Profile do
     field :type, :string
     field :currency, :string
     belongs_to(:user, User)
+
     many_to_many(
       :users,
       User,
@@ -55,12 +52,12 @@ defmodule Remit.Profile do
     Repo.transaction(fn ->
       case Repo.insert(changeset) do
         {:ok, profile} ->
-
           UserProfiles.create(%{
             "profile_id" => profile.id,
             "user_id" => user.id,
             "role" => "admin"
           })
+
           profile
 
         {:error, changeset} ->
@@ -75,7 +72,6 @@ defmodule Remit.Profile do
     from x in __MODULE__,
       where: ilike(x.name, ^search_query)
   end
-
 
   def create(params, profile_type) when profile_type in ["user", "business"] do
     changeset =
@@ -105,6 +101,7 @@ defmodule Remit.Profile do
   def list_profiles do
     Repo.all(__MODULE__)
   end
+
   def get_profile!(id), do: Repo.get!(__MODULE__, id)
 
   def update_profile(%__MODULE__{} = profile, params) do

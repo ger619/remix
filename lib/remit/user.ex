@@ -1,8 +1,12 @@
 defmodule Remit.User do
   use Ecto.Schema
-  import Ecto.{Changeset, Query}
 
-  alias Remit.{Session, Profile, Repo}
+  import Ecto.Changeset
+  import Ecto.Query
+
+  alias Remit.Repo
+  alias Remit.Session
+  alias Remit.Profile
 
   schema "users" do
     field :name, :string, null: false
@@ -15,6 +19,7 @@ defmodule Remit.User do
     field :super_admin, :boolean, default: false
     field :require_password_change, :boolean, default: false
     has_many :sessions, Session, on_delete: :delete_all
+
     many_to_many(
       :profiles,
       Profile,
@@ -39,6 +44,7 @@ defmodule Remit.User do
     ])
     |> validate_required([:name, :phone_number, :email, :id_number, :id_type])
     |> unique_constraint(:phone_number)
+    |> validate_format(:email, ~r/@/)
     |> password_hash()
   end
 
@@ -61,4 +67,18 @@ defmodule Remit.User do
   end
 
   def get_user!(id), do: Repo.get!(__MODULE__, id)
+
+  def set_require_password_change(user = %{require_password_change: true}, new_password) do
+    user =
+      user
+      |> change(%{require_password_change: true, password_hash: new_password})
+      |> password_hash()
+      |> Repo.update!()
+
+    {:ok, user}
+  end
+
+  def set_require_password_change(_, _) do
+    {:error, :already_reset}
+  end
 end

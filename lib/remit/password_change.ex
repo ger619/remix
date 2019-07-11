@@ -1,7 +1,6 @@
 defmodule Remit.PasswordChange do
   use Ecto.Schema
-  alias Remit.Repo
-  alias Remit.User
+  alias Remit.{Repo, User}
   import Ecto.Changeset
 
   embedded_schema do
@@ -12,21 +11,19 @@ defmodule Remit.PasswordChange do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:current_password, :password, :current_password])
+    |> cast(params, [:current_password, :password])
     |> validate_required([:current_password, :password])
     |> validate_confirmation(:password, message: "Password doesn't match")
   end
 
-  def update_password(
-        params,
-        user
-      ) do
+  def update_password(user, params) do
     changes = changeset(%__MODULE__{}, params)
 
     with {:ok, struct} <- apply_action(changes, :update),
          true <- Bcrypt.verify_pass(struct.current_password, user.password_hash) do
       user
       |> User.changeset(%{password_hash: struct.password})
+      |> change(require_password_change: false)
       |> Repo.update()
     else
       false ->

@@ -9,22 +9,22 @@ defmodule RemitWeb.UserControllerTest do
   @moduletag authenticate: %{email: "user@example.com"}
 
   @create_attrs %{
-    email: "some email",
-    id_number: "some id_number",
+    email: "some@email.com",
+    id_number: "some_id_number",
     id_type: "national_id",
-    is_admin: "some is_admin",
-    name: "some name",
-    password_hash: "some password_hash",
-    phone_number: "some phone_number"
+    is_admin: "some_is_admin",
+    name: "some_name",
+    password_hash: "some_password_hash",
+    phone_number: "some_phone_number"
   }
   @update_attrs %{
-    email: "some updated email",
-    id_number: "some updated id_number",
+    email: "some@updatedemail.com",
+    id_number: "some_updated_id_number",
     id_type: "national_id",
-    is_admin: "some updated is_admin",
-    name: "some updated name",
-    password_hash: "some updated password_hash",
-    phone_number: "some updated phone_number"
+    is_admin: "some_updated_is_admin",
+    name: "some_updated_name",
+    password_hash: "some_updated_password_hash",
+    phone_number: "some_updated_phone_number"
   }
   @invalid_attrs %{
     email: nil,
@@ -111,7 +111,7 @@ defmodule RemitWeb.UserControllerTest do
       assert redirected_to(conn) == Routes.user_path(conn, :show, user)
 
       conn = get(conn, Routes.user_path(conn, :show, user))
-      assert html_response(conn, 200) =~ "some updated email"
+      assert html_response(conn, 200) =~ "some@updatedemail.com"
     end
 
     test "renders errors when data is invalid", %{conn: conn, user: user} do
@@ -130,6 +130,33 @@ defmodule RemitWeb.UserControllerTest do
       conn = get(conn, Routes.user_path(conn, :show, user))
       # user is still shown when archived
       assert html_response(conn, 200)
+    end
+  end
+
+  describe "reset password" do
+    setup [:verify_on_exit!, :create_user]
+
+    test "POST /users/:id/reset when require_password_change is true", %{conn: conn, user: user} do
+      #line 139 has an error
+      Remit.SMSMock
+      |> expect(:deliver, fn phone_number, message, _config ->
+        assert phone_number == @create_attrs.phone_number
+        assert message =~ "Your new password is"
+        {:ok, nil}
+      end)
+
+      conn = post(conn, Routes.user_path(conn, :reset_action, user))
+      assert redirected_to(conn) == Routes.user_path(conn, :show, user)
+      assert get_flash(conn, :info)
+      assert %{require_password_change: true} = Accounts.get_user!(user.id)
+    end
+
+    test "POST /users/:id/reset when require_password_change is false", %{conn: conn, user: user} do
+      user |> Ecto.Changeset.change(require_password_change: false) |> Repo.update!()
+      conn = post(conn, Routes.user_path(conn, :reset_action, user))
+      assert redirected_to(conn) == Routes.user_path(conn, :show, user)
+      # assert get_flash(conn, :error)
+      assert %{require_password_change: false} = Accounts.get_user!(user.id)
     end
   end
 

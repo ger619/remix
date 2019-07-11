@@ -25,17 +25,14 @@
                 <td><%= profile.name %></td>
                 <td><%= profile.currency %></td>
 
+
+
                 <td class="text-right">
                     <%= link "show", to: Routes.profile_path(@conn, :show, profile) %>
                     <%= link "edit", to: Routes.profile_path(@conn, :edit, profile) %>
-                    
+
                 </td>
             </tr>
         <% end %>
     </tbody>
 </table>
-
-
-
-
- 

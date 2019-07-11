@@ -1,11 +1,7 @@
 defmodule RemitWeb.UserController do
   use RemitWeb, :controller
 
-  alias Remit.Repo
-  alias Remit.User
-  alias Remit.Accounts
-  alias Remit.IDType
-  alias Remit.SMS
+  alias Remit.{Repo, User, Accounts, IDType, SMS}
 
   def index(conn, params) do
     page =
@@ -27,15 +23,20 @@ defmodule RemitWeb.UserController do
     render(conn, "new.html", changeset: changeset, id_types: id_types)
   end
 
+  defp random_pass(length) do
+    :crypto.strong_rand_bytes(length) |> Base.url_encode64() |> binary_part(0, length)
+  end
+
+  @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"user" => user_params}) do
     password = random_pass(6)
-    Map.merge(user_params, %{"password_hash" => password})
+    user_params = Map.put(user_params, "password_hash", password)
 
     case Accounts.create_user(user_params) do
       {:ok, user} ->
         SMS.deliver(
           user.phone_number,
-          "Your new password is #{password} logon to http://… to change it"
+          "Your new password is #{password} logon to #{Routes.page_url(conn, :index)} to change it"
         )
 
         conn
@@ -48,10 +49,7 @@ defmodule RemitWeb.UserController do
     end
   end
 
-  defp random_pass(length) do
-    :crypto.strong_rand_bytes(length) |> Base.url_encode64() |> binary_part(0, length)
-  end
-
+  @spec show(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
     render(conn, "show.html", user: user)
@@ -87,5 +85,31 @@ defmodule RemitWeb.UserController do
     conn
     |> put_flash(:info, "User deleted successfully.")
     |> redirect(to: Routes.user_path(conn, :show, user))
+  end
+
+  def reset_action(conn, %{"id" => user_id}) do
+    user = Accounts.get_user!(user_id)
+    pass = random_pass(6)
+
+    conn =
+      case User.set_require_password_change(user, pass) do
+        {:ok, _} ->
+          SMS.deliver(
+            user.phone_number,
+            "Your new password is #{pass} logon to #{Routes.user_url(conn, :index)} to change it"
+          )
+
+          conn
+          |> put_flash(:info, "Your password has been reset")
+
+        {:error, _} ->
+          conn
+          |> put_flash(
+            :error,
+            "Password had already been changed, ask the user to reset their password."
+          )
+      end
+
+    conn |> redirect(to: Routes.user_path(conn, :show, user))
   end
 end
