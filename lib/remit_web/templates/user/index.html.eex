@@ -25,7 +25,7 @@
     </tr>
   </thead>
   <tbody>
-  <%= for user <- @users do %>
+    <%= for user <- @users do %>
     <tr>
       <td><%= user.name %></td>
       <td><%= user.phone_number %></td>
@@ -36,9 +36,12 @@
       <td>
         <%= link "Show", to: Routes.user_path(@conn, :show, user) %>
         <%= link "Edit", to: Routes.user_path(@conn, :edit, user) %>
+        <%= if user.require_password_change do %>
+        <%= link "Reset PassWord", to: Routes.user_path(@conn, :reset_action, user ), method: :post,  data: [confirm: "Are you sure?"] %>
+        <% end %>
       </td>
     </tr>
-  <% end %>
+    <% end %>
   </tbody>
 </table>
 

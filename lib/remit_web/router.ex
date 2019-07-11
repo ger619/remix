@@ -16,6 +16,10 @@ defmodule RemitWeb.Router do
     plug :user_check
   end
 
+  pipeline :requires_password_change do
+    plug :check_requires_password_change
+  end
+
   pipeline :guest do
     plug :guest_check
   end
@@ -29,24 +33,37 @@ defmodule RemitWeb.Router do
 
     get "/", PageController, :index
     resources "/sessions", SessionController, only: [:new, :create]
-
   end
 
   scope "/", RemitWeb do
     pipe_through [:browser, :authenticated]
 
-    get "/dashboard", PageController, :dashboard
-    post "/dashboard", PageController, :dashboard
-
-    get "/password-change", PasswordController, :index
     post "/password-change", PasswordController, :create
+    get "/password-change", PasswordController, :index
+  end
 
+  scope "/", RemitWeb do
+    pipe_through [:browser, :authenticated, :requires_password_change]
+
+    get "/dashboard", PageController, :dashboard
     resources "/profiles", ProfileController, except: [:delete]
+
     resources "/users", UserController
+    post "/user/:id/reset", UserController, :reset_action
+
     resources "/sessions", SessionController, only: [:delete]
 
     get "/new-profile", ProfileController, :new_business_profile
     post "/new-profile", ProfileController, :create_business_profile
+  end
 
+  defp check_requires_password_change(conn, _opts) do
+    if conn.assigns.current_user.require_password_change do
+      conn
+      |> redirect(to: RemitWeb.Router.Helpers.password_path(conn, :index))
+      |> halt()
+    else
+      conn
+    end
   end
 end

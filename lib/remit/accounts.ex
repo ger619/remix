@@ -5,11 +5,7 @@ defmodule Remit.Accounts do
 
   import Ecto.Query, warn: false
 
-  alias Remit.Repo
-  alias Remit.User
-  alias Remit.Profile
-  alias Remit.Session
-  alias Remit.Sessions.Sessionhandler
+  alias Remit.{Repo, User, Profile, Session, Sessions.Sessionhandler}
 
   @doc """
   Returns the list of users.
@@ -69,12 +65,12 @@ defmodule Remit.Accounts do
 
   """
 
-  def create_user(user) do
+  def create_user(params) do
     Repo.transaction(fn ->
       changeset =
         %User{}
         |> Ecto.Changeset.change(require_password_change: true)
-        |> User.changeset(user)
+        |> User.changeset(params)
 
       result = Repo.insert(changeset)
 

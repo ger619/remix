@@ -1,7 +1,7 @@
 defmodule RemitWeb.ProfileController do
   use RemitWeb, :controller
 
-  alias Remit.{Profile, Repo}
+  alias Remit.{Repo, Profile}
 
   def index(conn, params) do
     page =
