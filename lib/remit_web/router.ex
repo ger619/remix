@@ -46,6 +46,7 @@ defmodule RemitWeb.Router do
     pipe_through [:browser, :authenticated, :requires_password_change]
 
     get "/dashboard", PageController, :dashboard
+    post "/dashboard", PageController, :dashboard
     resources "/profiles", ProfileController, except: [:delete]
 
     resources "/users", UserController
