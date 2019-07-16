@@ -1,4 +1,4 @@
-defmodule Remit.UserProfiles  do
+defmodule Remit.UserProfiles do
   use Ecto.Schema
   import Ecto.{Changeset, Query}
 
@@ -13,8 +13,8 @@ defmodule Remit.UserProfiles  do
   end
 
   @doc false
-  def changeset(user__profile, attrs) do
-    user__profile
+  def changeset(user_profile, attrs) do
+    user_profile
     |> cast(attrs, [:role, :user_id, :profile_id])
     |> validate_required([:role, :profile_id, :user_id])
   end
@@ -25,22 +25,36 @@ defmodule Remit.UserProfiles  do
     |> Repo.insert!()
   end
 
-  def search_query(q) do
+  def preload_profile_query(queryable \\ __MODULE__) do
+    from(u in queryable,
+      join: p in assoc(u, :profile),
+      as: :profile,
+      preload: [profile: p]
+    )
+  end
+
+  @doc """
+  Search for associated profile by name
+
+  Assumes profile is joined in
+  """
+  def search_query(queryable \\ __MODULE__, q) do
     q = "%#{q}%"
-    from(u in __MODULE__,
-      left_join: x in assoc(u, :user),
-      left_join: y in assoc(u, :profile),
-      preload: [user: x, profile: y],
-      where: ilike(x.name, ^q),
-      or_where: ilike(y.name, ^q)
-      )
+
+    from([profile: p] in queryable,
+      where: ilike(p.name, ^q)
+    )
   end
 
-  def join_user_query()  do
+  def join_user_query() do
     from(u in __MODULE__,
-    join: x in assoc(u, :user),
-    join: y in assoc(u, :profile),
-    preload: [user: x, profile: y])
+      join: x in assoc(u, :user),
+      join: y in assoc(u, :profile),
+      preload: [user: x, profile: y]
+    )
   end
 
+  def user_query(queryable \\ __MODULE__, user_id) do
+    from(u in queryable, where: u.user_id == ^user_id)
+  end
 end

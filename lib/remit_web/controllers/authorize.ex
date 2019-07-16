@@ -31,7 +31,6 @@ defmodule RemitWeb.Authorize do
 
   def guest_check(%Plug.Conn{assigns: %{current_user: _current_user}} = conn, _opts) do
     conn
-    |> put_flash(:error, "You need to log out to view this page")
     |> redirect(to: Routes.page_path(conn, :dashboard))
     |> halt()
   end

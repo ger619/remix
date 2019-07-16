@@ -20,7 +20,7 @@ defmodule Remit.MixProject do
   def application do
     [
       mod: {Remit.Application, []},
-      extra_applications: [:logger, :runtime_tools, :scrivener_ecto, :scrivener_html]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
