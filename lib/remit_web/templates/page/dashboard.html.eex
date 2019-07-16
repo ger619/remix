@@ -1,0 +1,33 @@
+<%= link "Create Business Profile", to: Routes.profile_path(@conn, :new_business_profile) %>
+
+<br>
+<br>
+
+<div class="row">
+    <div class="col-md-8">
+        <%= form_for @conn, Routes.page_path(@conn, :dashboard), [method: :get, class: "pull-right"], fn f -> %>
+        <%= search_input f, :query, on_submit: "this.form.submit()" %>
+        <% end %>
+    </div>
+</div>
+
+<p>Business Profiles</p>
+<table class="table table-striped">
+    <thead>
+        <th>Profile</th>
+        <th>Type</th>
+    </thead>
+    <tbody>
+        <% IO.inspect @page %>
+        <%= for user_profile <- @page do %>
+        <tr>
+            <td><%= user_profile.profile.name %></td>
+            <td><%= user_profile.profile.type %></td>
+        </tr>
+        <% end %>
+    </tbody>
+</table>
+
+<%= if @page.total_pages > 1 do %>
+<%= pagination_links @page, next: "Next", previous: "Prev"%>
+<% end %>

@@ -38,8 +38,8 @@ defmodule RemitWeb.Router do
   scope "/", RemitWeb do
     pipe_through [:browser, :authenticated]
 
-    post "/password_change", PasswordController, :create
-    get "/password_change", PasswordController, :index
+    post "/password-change", PasswordController, :create
+    get "/password-change", PasswordController, :index
   end
 
   scope "/", RemitWeb do
@@ -52,6 +52,9 @@ defmodule RemitWeb.Router do
     post "/user/:id/reset", UserController, :reset_action
 
     resources "/sessions", SessionController, only: [:delete]
+
+    get "/new-profile", ProfileController, :new_business_profile
+    post "/new-profile", ProfileController, :create_business_profile
   end
 
   defp check_requires_password_change(conn, _opts) do

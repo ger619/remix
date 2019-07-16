@@ -14,10 +14,13 @@ defmodule RemitWeb.SessionController do
   def create(conn, %{"session" => params}) do
     case Login.verify(params) do
       {:ok, user} ->
+        redirect_path = get_session(conn, :request_path) || Routes.page_path(conn, :dashboard)
+
         conn
         |> add_session(user, params)
         |> put_flash(:info, "User successfully logged in.")
-        |> redirect(to: get_session(conn, :request_path) || Routes.user_path(conn, :index))
+        |> delete_session(:request_path)
+        |> redirect(to: redirect_path)
 
       {:error, message} ->
         conn

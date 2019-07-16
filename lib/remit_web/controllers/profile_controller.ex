@@ -66,4 +66,20 @@ defmodule RemitWeb.ProfileController do
     |> put_flash(:info, "Profile deleted successfully")
     |> redirect(to: Routes.profile_path(conn, :show, profile))
   end
+
+  def new_business_profile(conn, _params) do
+    changeset = Profile.changeset(%Profile{})
+    render(conn, "new_business_profile.html", changeset: changeset)
+  end
+
+  def create_business_profile(conn, %{"profile" => profile_params}) do
+    case Profile.create_with_user(conn.assigns.current_user, profile_params) do
+      {:ok, profile} ->
+        conn
+        |> redirect(to: Routes.profile_path(conn, :show, profile))
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "new_business_profile.html", changeset: changeset)
+    end
+  end
 end

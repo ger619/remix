@@ -6,6 +6,7 @@ defmodule Remit.User do
 
   alias Remit.Repo
   alias Remit.Session
+  alias Remit.Profile
 
   schema "users" do
     field :name, :string, null: false
@@ -18,6 +19,13 @@ defmodule Remit.User do
     field :super_admin, :boolean, default: false
     field :require_password_change, :boolean, default: false
     has_many :sessions, Session, on_delete: :delete_all
+
+    many_to_many(
+      :profiles,
+      Profile,
+      join_through: "user_profiles",
+      on_replace: :delete
+    )
 
     timestamps()
   end
@@ -57,6 +65,8 @@ defmodule Remit.User do
       where: ilike(x.name, ^search_query),
       or_where: ilike(x.id_number, ^search_query)
   end
+
+  def get_user!(id), do: Repo.get!(__MODULE__, id)
 
   def set_require_password_change(user = %{require_password_change: true}, new_password) do
     user =

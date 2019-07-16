@@ -2,9 +2,9 @@ defmodule Remit.Profile do
   use Ecto.Schema
 
   import Ecto.Changeset
-  import Ecto.Query
+  import Ecto.Query, only: [from: 2]
 
-  alias Remit.{Repo, User, Account}
+  alias Remit.{Repo, User, Account, UserProfiles}
 
   schema "profiles" do
     field :name, :string
@@ -13,8 +13,15 @@ defmodule Remit.Profile do
     field :currency, :string
     belongs_to(:user, User)
 
+    many_to_many(
+      :users,
+      User,
+      join_through: "user_profiles",
+      on_replace: :delete
+    )
+
     timestamps()
-  end  
+  end
 
   @doc false
   def changeset(profile, attrs \\ %{}) do
@@ -33,6 +40,30 @@ defmodule Remit.Profile do
     else
       changeset
     end
+  end
+
+  def create_with_user(user, form_params) do
+    form_params = Map.put(form_params, "type", "business")
+
+    changeset =
+      %__MODULE__{}
+      |> changeset(form_params)
+
+    Repo.transaction(fn ->
+      case Repo.insert(changeset) do
+        {:ok, profile} ->
+          UserProfiles.create(%{
+            "profile_id" => profile.id,
+            "user_id" => user.id,
+            "role" => "admin"
+          })
+
+          profile
+
+        {:error, changeset} ->
+          Repo.rollback(changeset)
+      end
+    end)
   end
 
   def search_query(q) do
