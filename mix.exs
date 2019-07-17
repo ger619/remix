@@ -48,7 +48,8 @@ defmodule Remit.MixProject do
       {:scrivener_html, "~> 1.8"},
       {:phauxth, "~> 2.2"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:mox, "~> 0.5", only: :test}
+      {:mox, "~> 0.5", only: :test},
+      {:font_awesomex, "~> 4.0.0"}
     ]
   end
 
