@@ -49,7 +49,8 @@ defmodule Remit.MixProject do
       {:phauxth, "~> 2.2"},
       {:bcrypt_elixir, "~> 2.0"},
       {:mox, "~> 0.5", only: :test},
-      {:font_awesomex, "~> 4.0.0"}
+      {:font_awesomex, "~> 4.0.0"},
+      {:font_awesome_phoenix, "~> 1.0"}
     ]
   end
 

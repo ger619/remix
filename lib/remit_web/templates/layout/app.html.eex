@@ -5,137 +5,175 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
   <title>Remit </title>
-  <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.scss") %>" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>" >
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
 
-  <!-- Dashboard Core -->
-  <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/scss/dashboard/dashboard.scss") %>" />
-
 </head>
-  <header>
-    <section class="container">
-      <nav role="navigation">
 
+<div class="header py-4">
+      <div class="container">
+        <%= if @current_user do %>
+            <div class="d-flex">
+              <a class="header-brand" href="./index.html">
+                <img src="./demo/brand/tabler.svg" class="header-brand-img" alt="Remit logo">
+              </a>
+              <div class="d-flex order-lg-2 ml-auto">
 
-        <div class="container-fluid ">
-          <div class="row">
-            <div class="col-md-8">
+                <div class="dropdown d-none d-md-flex">
+                  <a class="nav-link icon" data-toggle="dropdown">
+                    <i class="fa fa-bell"></i>
+                    <span class="nav-unread"></span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                    <a href="#" class="dropdown-item d-flex">
+                      <span class="avatar mr-3 align-self-center" style="background-image: url(demo/faces/male/41.jpg)"></span>
+                      <div>
+                        <strong>Nathan</strong> pushed new commit: Fix page load performance issue.
+                        <div class="small text-muted">10 minutes ago</div>
+                      </div>
+                    </a>
 
-            </div>
-            <div class="col-md-4" >
-                 <%= if @current_user do %>
-
-                 <div class="dropdown dropdown-menu-right" style="text-align: center" >
-                       <a  class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <!-- <span class="ml-2 d-none d-lg-black"></span> -->
-                        <span class="text-default"><%= @current_user.name %></span>
-
-                       </a>
-                       <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow" >
-                         <a class="dropdown-item">
-                           <%= link " Users", class: "dropdown-icon fa fa-user fa-size-2x",  to: Routes.user_path(@conn, :index) %>
-                        </a>
-                        <a class="dropdown-item">
-                          <%= link "Profile", class: "dropdown-icon fa fa-bank fa-size-2x",  to: Routes.profile_path(@conn, :index) %>
-                       </a>
-                         <a class="dropdown-item">
-                           <%= link " Password", class: "dropdown-icon fa fa-key fa-size-2x",  to: Routes.password_path(@conn, :index) %>
-                        </a>
-                        <div class="dropdown-divider"></div>
-
-                         <a class="dropdown-item">
-                           <%= link "Log out", class: "dropdown-icon fa fa-sign-out fa-size-2x", to: Routes.session_path(@conn, :delete, current_session(@conn)), method: :delete %>
-                          </a>
-
-                       </div>
-                     </div>
-
-                         <% else %>
-
-                           <%= link "Remit", class: "btn btn-primary", to: Routes.page_path(@conn, :index) %>
-                           <%= link "Login", class: "btn btn-primary", to: Routes.session_path(@conn, :new) %>
-                       </div>
-
-                 <% end %>
-
-          </div>
-
-
-
-          </div>
-
-        </div>
-
-        <div class="dropdown-divider"></div>
-
-        <div class="container-fluid">
-          <%= if @current_user do %>
-          <nav class="navbar navbar-expand-lg navbar-light bg-light">
-              <a class="navbar-brand" href="#">Remit Icon</a>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                  <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Profile</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Users</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Accounts</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">History</a>
-                  </li>
-
-
-                </ul>
-                <form class="form-inline my-2 my-lg-0">
-                  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                </form>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item text-center">Mark all as read</a>
+                  </div>
+                </div>
+                <div class="dropdown">
+                  <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
+                    <span class="avatar"></span>
+                    <span class="ml-2 d-none d-lg-block">
+                      <span class="text-default"><%= @current_user.name %></span>
+                      <small class="text-muted d-block mt-1"><%= @current_user.email %></small>
+                    </span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                    <a class="dropdown-item" href="<%= Routes.user_path(@conn, :index) %>">
+                      <i class="dropdown-icon fa fa-user"></i> User
+                    </a>
+                    <a class="dropdown-item" href="<%= Routes.profile_path(@conn, :index) %>">
+                      <i class="dropdown-icon fa fa-gear"></i> Profile
+                    </a>
+                    <a class="dropdown-item" href="<%= Routes.password_path(@conn, :index) %>">
+                      <i class="dropdown-icon fa fa-lock"></i> Password
+                    </a>
+                    <a class="dropdown-item" href="#">
+                      <i class="dropdown-icon fe fe-send"></i> Message
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">
+                      <i class="dropdown-icon fe fe-help-circle"></i> Need help?
+                    </a>
+                    <a class="dropdown-item" href="#">
+                      <i class="dropdown-icon fe fa-log-out"></i> Sign out
+                    </a>
+                  </div>
+                </div>
               </div>
-              </nav>
-            <% end %>
-      </div>
+              <a href="#" class="header-toggler d-lg-none ml-3 ml-lg-0" data-toggle="collapse" data-target="#headerMenuCollapse">
+                <span class="header-toggler-icon"></span>
+              </a>
+            </div>
+
+            <% else %>
+
+           <%= link "Remit", class: "btn btn-primary", to: Routes.page_path(@conn, :index) %>
+           <%= link "Login", class: "btn btn-primary", to: Routes.session_path(@conn, :new) %>
+
+           <% end %>
+       </div>
+    </div>
+
+  <header>
+
+    <%= if @current_user do %>
+
+    <div class="page">
+          <div class="flex-fill">
+            <div class="header collapse d-lg-flex p-0" id="headerMenuCollapse">
+              <div class="container">
+                <div class="row align-items-center">
+                  <div class="col-lg-3 ml-auto">
+                    <form class="input-icon my-3 my-lg-0">
+                      <input type="search" class="form-control header-search" placeholder="Search&hellip;" tabindex="1">
+                      <div class="input-icon-addon">
+                        <i class="fa fa-search"></i>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-lg order-lg-first">
+                    <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
+                      <li class="nav-item">
+                        <a href="<%= Routes.page_path(@conn, :index) %>" class="nav-link"><i class="fa fa-home"></i> Home</a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<%= Routes.profile_path(@conn, :index) %>" class="nav-link" data-toggle="dropdown"><i class="fa fa-gear"></i> Profile</a>
+
+                      </li>
+                      <li class="nav-item dropdown">
+                        <a href="" class="nav-link" data-toggle="dropdown"><i class="fa fa-calendar"></i> Transactions History</a>
+                      </li>
+                      <li class="nav-item dropdown">
+                        <a href="javascript:void(0)" class="nav-link active" data-toggle="dropdown"><i class="fa fa-file"></i> Business Profiles</a>
+                        <div class="dropdown-menu dropdown-menu-arrow">
+                          <a href="./profile.html" class="dropdown-item ">Profile</a>
+                          <a href="./login.html" class="dropdown-item ">Login</a>
+                          <a href="./register.html" class="dropdown-item ">Register</a>
+                          <a href="./forgot-password.html" class="dropdown-item ">Forgot password</a>
+                          <a href="./400.html" class="dropdown-item ">400 error</a>
+                          <a href="./401.html" class="dropdown-item ">401 error</a>
+                          <a href="./403.html" class="dropdown-item ">403 error</a>
+                          <a href="./404.html" class="dropdown-item ">404 error</a>
+                          <a href="./500.html" class="dropdown-item ">500 error</a>
+                          <a href="./503.html" class="dropdown-item ">503 error</a>
+                          <a href="./email.html" class="dropdown-item ">Email</a>
+                          <a href="./empty.html" class="dropdown-item active">Empty page</a>
+                          <a href="./rtl.html" class="dropdown-item ">RTL mode</a>
+                        </div>
+                      </li>
+
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+<% end %>
 
 
 
-      </nav>
-    </section>
   </header>
   <main role="main" class="container">
+    <%= if get_flash(@conn, :info) do %>
     <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+    <% end %>
+    <%= if get_flash(@conn, :error) do %>
     <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+    <% end %>
     <%= render @view_module, @view_template, assigns %>
   </main>
   <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
+
+<footer>
+  <div class="container">
+    <div class="row align-items-center flex-row-reverse">
+      <div class="col-auto ml-lg-auto">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <ul class="list-inline list-inline-dots mb-0">
+              <li class="list-inline-item"><a href="./docs/index.html">Documentation</a></li>
+              <li class="list-inline-item"><a href="./faq.html">FAQ</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-auto mt-3 mt-lg-0 text-center">
+        Copyright © 2019 <a href=".">Remit App</a>All rights reserved.
+      </div>
+    </div>
+  </div>
+</footer>
