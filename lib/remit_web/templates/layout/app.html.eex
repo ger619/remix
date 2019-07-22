@@ -57,7 +57,7 @@
               <i class="dropdown-icon fa fa-gear"></i> Profile
             </a>
             <a class="dropdown-item" href="<%= Routes.password_path(@conn, :index) %>">
-              <i class="dropdown-icon fa fa-lock"></i> Password
+              <i class="dropdown-icon fa fa-lock"></i> change Password
             </a>
             <a class="dropdown-item" href="#">
               <i class="dropdown-icon fe fe-send"></i> Message
