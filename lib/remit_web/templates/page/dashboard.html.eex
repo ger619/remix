@@ -9,6 +9,7 @@
             </h1>
           </div>
           <div class="row row-cards">
+            <div class='row'>
             <div class="col-6 col-sm-4 col-lg-2">
               <div class="card">
                 <div class="card-body p-3 text-center">
@@ -22,6 +23,7 @@
               </div>
             </div>
             <%= for user_profile <- @page do %>
+          
 
                       <div class="col-6 col-sm-4 col-lg-2">
                         <div class="card">
@@ -36,6 +38,9 @@
                         </div>
                       </div>
               <% end %>
+
+
+              </div>
 
 
             <div class="col-lg-6">
