@@ -39,9 +39,9 @@ defmodule RemitWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import FontAwesomePhoenix.HTML
       import RemitWeb.ErrorHelpers
       import RemitWeb.Gettext
+
       alias RemitWeb.Router.Helpers, as: Routes
     end
   end
