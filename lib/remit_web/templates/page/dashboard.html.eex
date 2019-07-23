@@ -1,6 +1,4 @@
 <body>
-
-
 <div class="my-3 my-md-5">
         <div class="container">
           <div class="page-header">
@@ -16,7 +14,9 @@
                     6%
                     <i class="fe fe-chevron-up"></i>
                   </div>
-                  <div class="h1 m-0"><%= link "", class: "fa fa-plus fa-size-4x", to: Routes.profile_path(@conn, :new_business_profile) %></div>
+                  <div class="h1 m-0"><%= link class: "fa fa-plus fa-size-4x", to: Routes.profile_path(@conn, :new_business_profile) do %>
+                  <% end %>
+                  </div>
                   <div class="text-muted mb-4">Create</div>
                 </div>
               </div>
@@ -40,32 +40,8 @@
             <% end %>
 
             </div>
-</div>
-<div class="row">
-    <div class="col-md-8">
-        <%= form_for @conn, Routes.page_path(@conn, :dashboard), [method: :get, class: "pull-right"], fn f -> %>
-        <%= search_input f, :query, on_submit: "this.form.submit()" %>
-        <% end %>
-    </div>
-</div>
-<br>
-<table class="table table-striped">
-    <thead>
-        <th>Profile</th>
-        <th>Type</th>
-    </thead>
-    <tbody>
-        <%= for user_profile <- @page do %>
-        <tr>
-            <td><%= user_profile.profile.name %></td>
-            <td><%= user_profile.profile.type %></td>
-        </tr>
-        <% end %>
-    </tbody>
-</table>
+          </div>
+        </div>
 
-<%= if @page.total_pages > 1 do %>
-<%= pagination_links @page, next: "Next", previous: "Prev"%>
-<% end %>
 
 </body>
