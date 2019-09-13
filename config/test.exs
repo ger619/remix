@@ -11,10 +11,10 @@ config :logger, level: :warn
 
 # Configure your database
 config :remit, Remit.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "remit_test",
-  hostname: "localhost",
+  username: "",
+  password: "",
+  database: "",
+  hostname: "",
   pool: Ecto.Adapters.SQL.Sandbox
 
 config :bcrypt_elixir, log_rounds: 4
