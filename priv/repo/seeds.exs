@@ -38,7 +38,6 @@ entries =
 
 {1, _} = Repo.insert_all(Remit.IDType, entries)
 
-
 entries =
   [%{slug: "resident_id", name: "Resident ID"}]
   |> Enum.map(fn id_type ->
@@ -48,7 +47,6 @@ entries =
   end)
 
 {1, _} = Repo.insert_all(Remit.IDType, entries)
-
 
 Repo.insert!(
   Ecto.Changeset.change(%User{}, %{
@@ -60,7 +58,6 @@ Repo.insert!(
     password_hash: Bcrypt.hash_pwd_salt("admin123")
   })
 )
-
 
 Repo.insert!(
   Ecto.Changeset.change(%User{}, %{
