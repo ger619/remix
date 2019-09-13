@@ -68,10 +68,10 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Configure your database
 config :remit, Remit.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "remit_dev",
-  hostname: "localhost",
+  username: "",
+  password: "",
+  database: "",
+  hostname: "",
   pool_size: 10
 
 import_config "dev.local.exs"
